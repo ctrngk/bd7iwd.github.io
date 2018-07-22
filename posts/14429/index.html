@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+
+
+  <meta name="keywords" content="Arduino,AM2302,DHT22,温湿度,OLED," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="所需硬件设备   序号 设备 数量 备注     1 Arduino 1 我用的是 Arduino UNO   2 OLED 显示屏 1 我用的是 IIC 的   3 温湿度传感器 我用 DHT22">
+<meta name="keywords" content="Arduino,AM2302,DHT22,温湿度,OLED">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自制温湿度计备忘">
+<meta property="og:url" content="http://www.bd7iwd.com/posts/14429/index.html">
+<meta property="og:site_name" content="得未曾有">
+<meta property="og:description" content="所需硬件设备   序号 设备 数量 备注     1 Arduino 1 我用的是 Arduino UNO   2 OLED 显示屏 1 我用的是 IIC 的   3 温湿度传感器 我用 DHT22">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ackk.qiniudn.com/15322390095832.jpg">
+<meta property="og:updated_time" content="2018-07-22T06:28:40.875Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="自制温湿度计备忘">
+<meta name="twitter:description" content="所需硬件设备   序号 设备 数量 备注     1 Arduino 1 我用的是 Arduino UNO   2 OLED 显示屏 1 我用的是 IIC 的   3 温湿度传感器 我用 DHT22">
+<meta name="twitter:image" content="http://ackk.qiniudn.com/15322390095832.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.bd7iwd.com/posts/14429/"/>
+
+
+
+
+
+  <title>自制温湿度计备忘 | 得未曾有</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">得未曾有</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">粗缯大布裹生涯，腹有诗书耍流氓</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.bd7iwd.com/posts/14429/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="BD7IWD">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="得未曾有">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">自制温湿度计备忘</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-22T13:51:34+08:00">
+                2018-07-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/物联网·大数据/" itemprop="url" rel="index">
+                    <span itemprop="name">物联网·大数据</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://ackk.qiniudn.com/15322390095832.jpg" alt=""></p>
+<h1 id="所需硬件设备"><a href="#所需硬件设备" class="headerlink" title="所需硬件设备"></a>所需硬件设备</h1><table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">设备</th>
+<th style="text-align:center">数量</th>
+<th style="text-align:center">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">Arduino</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">我用的是 Arduino UNO</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">OLED 显示屏</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">我用的是 IIC 的</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">温湿度传感器</td>
+<td style="text-align:center">我用 DHT22</td>
+</tr>
+</tbody>
+</table>
+<a id="more"></a>
+<h1 id="所需软件库"><a href="#所需软件库" class="headerlink" title="所需软件库"></a>所需软件库</h1><table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">库名</th>
+<th style="text-align:center">作用</th>
+<th style="text-align:center">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">U8glib</td>
+<td style="text-align:center">显示屏驱动</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">Wire</td>
+<td style="text-align:center">单线通讯库</td>
+<td style="text-align:center">用于DHT22通讯</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">dht</td>
+<td style="text-align:center">DHT22的驱动</td>
+</tr>
+</tbody>
+</table>
+<h1 id="接线方式"><a href="#接线方式" class="headerlink" title="接线方式"></a>接线方式</h1><table>
+<thead>
+<tr>
+<th style="text-align:center">Arduino 接口</th>
+<th style="text-align:center">设备接口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">5V</td>
+<td style="text-align:center">OLED 屏 VCC</td>
+</tr>
+<tr>
+<td style="text-align:center">3V</td>
+<td style="text-align:center">DHT22传感器 VCC</td>
+</tr>
+<tr>
+<td style="text-align:center">GND</td>
+<td style="text-align:center">所有GND</td>
+</tr>
+<tr>
+<td style="text-align:center">A4</td>
+<td style="text-align:center">OLED 屏 SDA</td>
+</tr>
+<tr>
+<td style="text-align:center">A5</td>
+<td style="text-align:center">OLED 屏 SCL</td>
+</tr>
+<tr>
+<td style="text-align:center">02</td>
+<td style="text-align:center">DHT22 第2号引脚（VCC 旁边那个）</td>
+</tr>
+</tbody>
+</table>
+<h1 id="Arduino程序"><a href="#Arduino程序" class="headerlink" title="Arduino程序"></a>Arduino程序</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"U8glib.h"</span></span></span><br><span class="line">  <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Wire.h&gt;</span></span></span><br><span class="line">  <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dht.h&gt; </span></span></span><br><span class="line"></span><br><span class="line">  <span class="function">U8GLIB_SSD1306_128X64 <span class="title">u8g</span><span class="params">(U8G_I2C_OPT_NONE)</span></span>;  <span class="comment">// I2C </span></span><br><span class="line">  dht DHT;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">#<span class="meta-keyword">define</span> DHT22_PIN 2</span></span><br><span class="line">  </span><br><span class="line">  <span class="class"><span class="keyword">struct</span></span></span><br><span class="line"><span class="class"> &#123;</span></span><br><span class="line">   <span class="keyword">uint32_t</span> total;</span><br><span class="line">   <span class="keyword">uint32_t</span> ok;</span><br><span class="line">   <span class="keyword">uint32_t</span> crc_error;</span><br><span class="line">   <span class="keyword">uint32_t</span> time_out;</span><br><span class="line">   <span class="keyword">uint32_t</span> connect;</span><br><span class="line">   <span class="keyword">uint32_t</span> ack_l;</span><br><span class="line">   <span class="keyword">uint32_t</span> ack_h;</span><br><span class="line">   <span class="keyword">uint32_t</span> unknown;</span><br><span class="line"> &#125; stat = &#123; <span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>&#125;;  </span><br><span class="line">  </span><br><span class="line">  <span class="keyword">int</span> humidity;</span><br><span class="line">  <span class="keyword">double</span> temperature;</span><br><span class="line">  <span class="keyword">double</span> temperatureF;</span><br><span class="line">  <span class="keyword">int</span> dewPoint1;</span><br><span class="line">  String thisTemp = <span class="string">""</span>;</span><br><span class="line">  String thisHumidity = <span class="string">""</span>;</span><br><span class="line">  String thisDewPoint = <span class="string">""</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">  u8g.setFont(u8g_font_9x15);</span><br><span class="line">  u8g.drawStr(<span class="number">39</span>,<span class="number">10</span>, <span class="string">"BD7IWD"</span>);</span><br><span class="line">  u8g.setFont(u8g_font_9x15); </span><br><span class="line"></span><br><span class="line">  thisTemp = String(temperature) + <span class="string">"\260C"</span>;</span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span>* newTempC = (<span class="keyword">const</span> <span class="keyword">char</span>*) thisTemp.c_str();</span><br><span class="line">  u8g.drawStr(<span class="number">55</span>,<span class="number">35</span>, newTempC);</span><br><span class="line">  u8g.setFont(u8g_font_9x15);</span><br><span class="line">  u8g.drawStr(<span class="number">8</span>,<span class="number">35</span>, <span class="string">"Temp="</span>);</span><br><span class="line">  u8g.setFont(u8g_font_9x15); </span><br><span class="line">  thisHumidity = String(humidity) + <span class="string">"%"</span>;</span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span>* newHumidity = (<span class="keyword">const</span> <span class="keyword">char</span>*) thisHumidity.c_str();</span><br><span class="line">  u8g.drawStr(<span class="number">95</span>,<span class="number">55</span>, newHumidity);  </span><br><span class="line">  u8g.setFont(u8g_font_9x15);</span><br><span class="line">  u8g.drawStr(<span class="number">15</span>,<span class="number">55</span>, <span class="string">"humidity="</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">  Serial.begin(<span class="number">9600</span>);</span><br><span class="line">  Wire.begin();</span><br><span class="line">  Serial.println(<span class="string">"DHT22"</span>);</span><br><span class="line">  Serial.print(<span class="string">"LIBRARY VERSION: "</span>);</span><br><span class="line">  Serial.println(DHT_LIB_VERSION);</span><br><span class="line">  Serial.println();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">loop</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">uint32_t</span> start = micros();</span><br><span class="line">  <span class="keyword">int</span> chk = DHT.read22(DHT22_PIN);</span><br><span class="line">  <span class="keyword">uint32_t</span> stop = micros();</span><br><span class="line">  stat.total++;</span><br><span class="line">  <span class="keyword">switch</span> (chk)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">case</span> DHTLIB_OK:</span><br><span class="line">      stat.ok++;</span><br><span class="line">      Serial.print(<span class="string">"OK,\t"</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> DHTLIB_ERROR_CHECKSUM:</span><br><span class="line">      stat.crc_error++;</span><br><span class="line">      Serial.print(<span class="string">"Checksum error,\t"</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> DHTLIB_ERROR_TIMEOUT:</span><br><span class="line">      stat.time_out++;</span><br><span class="line">      Serial.print(<span class="string">"Time out error,\t"</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> DHTLIB_ERROR_CONNECT:</span><br><span class="line">      stat.connect++;</span><br><span class="line">      Serial.print(<span class="string">"Connect error,\t"</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> DHTLIB_ERROR_ACK_L:</span><br><span class="line">      stat.ack_l++;</span><br><span class="line">      Serial.print(<span class="string">"Ack Low error,\t"</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> DHTLIB_ERROR_ACK_H:</span><br><span class="line">      stat.ack_h++;</span><br><span class="line">      Serial.print(<span class="string">"Ack High error,\t"</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      stat.unknown++;</span><br><span class="line">      Serial.print(<span class="string">"Unknown error,\t"</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  temperature = DHT.temperature;</span><br><span class="line">  humidity = DHT.humidity;</span><br><span class="line">  dewPoint(temperature,humidity);  </span><br><span class="line">  u8g.firstPage();  </span><br><span class="line">  <span class="keyword">do</span> &#123;</span><br><span class="line">    draw();</span><br><span class="line">  &#125; <span class="keyword">while</span>( u8g.nextPage() );</span><br><span class="line">  delay(<span class="number">2000</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">dewPoint</span><span class="params">(<span class="keyword">double</span> celsius, <span class="keyword">double</span> humidity)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">double</span> a = <span class="number">17.271</span>;</span><br><span class="line">  <span class="keyword">double</span> b = <span class="number">237.7</span>;</span><br><span class="line">  <span class="keyword">double</span> temp = (a * celsius) / (b + celsius) + <span class="built_in">log</span>(humidity/<span class="number">100</span>);</span><br><span class="line">  dewPoint1 = (b * temp) / (a - temp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Arduino-AM2302-DHT22-温湿度-OLED/" rel="tag"># Arduino,AM2302,DHT22,温湿度,OLED</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/8a3c5d3d/" rel="next" title="评《乌合之众》">
+                <i class="fa fa-chevron-left"></i> 评《乌合之众》
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQyMC81OTg4"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">BD7IWD</p>
+              <p class="site-description motion-element" itemprop="description">粗缯大布裹生涯，腹有诗书耍流氓 | 一个草根博主的技术分享、随笔随记 | 静下来，享受技术、慢下来，反思过往</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#所需硬件设备"><span class="nav-number">1.</span> <span class="nav-text">所需硬件设备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#所需软件库"><span class="nav-number">2.</span> <span class="nav-text">所需软件库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#接线方式"><span class="nav-number">3.</span> <span class="nav-text">接线方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Arduino程序"><span class="nav-number">4.</span> <span class="nav-text">Arduino程序</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BD7IWD</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
