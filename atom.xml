@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>得未曾有</title>
+  
+  <subtitle>粗缯大布裹生涯，腹有诗书耍流氓</subtitle>
+  <link href="//atom.xml" rel="self"/>
+  
+  <link href="http://www.bd7iwd.com/"/>
+  <updated>2018-07-22T06:40:13.333Z</updated>
+  <id>http://www.bd7iwd.com/</id>
+  
+  <author>
+    <name>BD7IWD</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>自制温湿度计备忘</title>
+    <link href="http://www.bd7iwd.com/posts/14429/"/>
+    <id>http://www.bd7iwd.com/posts/14429/</id>
+    <published>2018-07-22T05:51:34.000Z</published>
+    <updated>2018-07-22T06:40:13.333Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="http://ackk.qiniudn.com/15322390095832.jpg" alt=""></p><h1 id="所需硬件设备"><a href="#所需硬件设备" class="headerlink" title="所需硬件设备"></a>所需硬件设备</h1><table><thead><tr><th style="text-align:center">序号</th><th style="text-align:center">设备</th><th style="text-align:center">数量</th><th style="text-align:center">备注</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td style="text-align:center">Arduino</td><td style="text-align:center">1</td><td style="text-align:center">我用的是 Arduino UNO</td></tr><tr><td style="text-align:center">2</td><td style="text-align:center">OLED 显示屏</td><td style="text-align:center">1</td><td style="text-align:center">我用的是 IIC 的</td></tr><tr><td style="text-align:center">3</td><td style="text-align:center">温湿度传感器</td><td style="text-align:center">我用 DHT22</td></tr></tbody></table><a id="more"></a><h1 id="所需软件库"><a href="#所需软件库" class="headerlink" title="所需软件库"></a>所需软件库</h1><table><thead><tr><th style="text-align:center">序号</th><th style="text-align:center">库名</th><th style="text-align:center">作用</th><th style="text-align:center">备注</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td style="text-align:center">U8glib</td><td style="text-align:center">显示屏驱动</td><td style="text-align:center"></td></tr><tr><td style="text-align:center">2</td><td style="text-align:center">Wire</td><td style="text-align:center">单线通讯库</td><td style="text-align:center">用于DHT22通讯</td></tr><tr><td style="text-align:center">3</td><td style="text-align:center">dht</td><td style="text-align:center">DHT22的驱动</td></tr></tbody></table><h1 id="接线方式"><a href="#接线方式" class="headerlink" title="接线方式"></a>接线方式</h1><table><thead><tr><th style="text-align:center">Arduino 接口</th><th style="text-align:center">设备接口</th></tr></thead><tbody><tr><td style="text-align:center">5V</td><td style="text-align:center">OLED 屏 VCC</td></tr><tr><td style="text-align:center">3V</td><td style="text-align:center">DHT22传感器 VCC</td></tr><tr><td style="text-align:center">GND</td><td style="text-align:center">所有GND</td></tr><tr><td style="text-align:center">A4</td><td style="text-align:center">OLED 屏 SDA</td></tr><tr><td style="text-align:center">A5</td><td style="text-align:center">OLED 屏 SCL</td></tr><tr><td style="text-align:center">02</td><td style="text-align:center">DHT22 第2号引脚（VCC 旁边那个）</td></tr></tbody></table><h1 id="Arduino程序"><a href="#Arduino程序" class="headerlink" title="Arduino程序"></a>Arduino程序</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"U8glib.h"</span></span></span><br><span class="line">  <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Wire.h&gt;</span></span></span><br><span class="line">  <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dht.h&gt; </span></span></span><br><span class="line"></span><br><span class="line">  <span class="function">U8GLIB_SSD1306_128X64 <span class="title">u8g</span><span class="params">(U8G_I2C_OPT_NONE)</span></span>;  <span class="comment">// I2C </span></span><br><span class="line">  dht DHT;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">#<span class="meta-keyword">define</span> DHT22_PIN 2</span></span><br><span class="line">  </span><br><span class="line">  <span class="class"><span class="keyword">struct</span></span></span><br><span class="line"><span class="class"> &#123;</span></span><br><span class="line">   <span class="keyword">uint32_t</span> total;</span><br><span class="line">   <span class="keyword">uint32_t</span> ok;</span><br><span class="line">   <span class="keyword">uint32_t</span> crc_error;</span><br><span class="line">   <span class="keyword">uint32_t</span> time_out;</span><br><span class="line">   <span class="keyword">uint32_t</span> connect;</span><br><span class="line">   <span class="keyword">uint32_t</span> ack_l;</span><br><span class="line">   <span class="keyword">uint32_t</span> ack_h;</span><br><span class="line">   <span class="keyword">uint32_t</span> unknown;</span><br><span class="line"> &#125; stat = &#123; <span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>&#125;;  </span><br><span class="line">  </span><br><span class="line">  <span class="keyword">int</span> humidity;</span><br><span class="line">  <span class="keyword">double</span> temperature;</span><br><span class="line">  <span class="keyword">double</span> temperatureF;</span><br><span class="line">  <span class="keyword">int</span> dewPoint1;</span><br><span class="line">  String thisTemp = <span class="string">""</span>;</span><br><span class="line">  String thisHumidity = <span class="string">""</span>;</span><br><span class="line">  String thisDewPoint = <span class="string">""</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">  u8g.setFont(u8g_font_9x15);</span><br><span class="line">  u8g.drawStr(<span class="number">39</span>,<span class="number">10</span>, <span class="string">"BD7IWD"</span>);</span><br><span class="line">  u8g.setFont(u8g_font_9x15); </span><br><span class="line"></span><br><span class="line">  thisTemp = String(temperature) + <span class="string">"\260C"</span>;</span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span>* newTempC = (<span class="keyword">const</span> <span class="keyword">char</span>*) thisTemp.c_str();</span><br><span class="line">  u8g.drawStr(<span class="number">55</span>,<span class="number">35</span>, newTempC);</span><br><span class="line">  u8g.setFont(u8g_font_9x15);</span><br><span class="line">  u8g.drawStr(<span class="number">8</span>,<span class="number">35</span>, <span class="string">"Temp="</span>);</span><br><span class="line">  u8g.setFont(u8g_font_9x15); </span><br><span class="line">  thisHumidity = String(humidity) + <span class="string">"%"</span>;</span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span>* newHumidity = (<span class="keyword">const</span> <span class="keyword">char</span>*) thisHumidity.c_str();</span><br><span class="line">  u8g.drawStr(<span class="number">95</span>,<span class="number">55</span>, newHumidity);  </span><br><span class="line">  u8g.setFont(u8g_font_9x15);</span><br><span class="line">  u8g.drawStr(<span class="number">15</span>,<span class="number">55</span>, <span class="string">"humidity="</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">  Serial.begin(<span class="number">9600</span>);</span><br><span class="line">  Wire.begin();</span><br><span class="line">  Serial.println(<span class="string">"DHT22"</span>);</span><br><span class="line">  Serial.print(<span class="string">"LIBRARY VERSION: "</span>);</span><br><span class="line">  Serial.println(DHT_LIB_VERSION);</span><br><span class="line">  Serial.println();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">loop</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">uint32_t</span> start = micros();</span><br><span class="line">  <span class="keyword">int</span> chk = DHT.read22(DHT22_PIN);</span><br><span class="line">  <span class="keyword">uint32_t</span> stop = micros();</span><br><span class="line">  stat.total++;</span><br><span class="line">  <span class="keyword">switch</span> (chk)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">case</span> DHTLIB_OK:</span><br><span class="line">      stat.ok++;</span><br><span class="line">      Serial.print(<span class="string">"OK,\t"</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> DHTLIB_ERROR_CHECKSUM:</span><br><span class="line">      stat.crc_error++;</span><br><span class="line">      Serial.print(<span class="string">"Checksum error,\t"</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> DHTLIB_ERROR_TIMEOUT:</span><br><span class="line">      stat.time_out++;</span><br><span class="line">      Serial.print(<span class="string">"Time out error,\t"</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> DHTLIB_ERROR_CONNECT:</span><br><span class="line">      stat.connect++;</span><br><span class="line">      Serial.print(<span class="string">"Connect error,\t"</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> DHTLIB_ERROR_ACK_L:</span><br><span class="line">      stat.ack_l++;</span><br><span class="line">      Serial.print(<span class="string">"Ack Low error,\t"</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> DHTLIB_ERROR_ACK_H:</span><br><span class="line">      stat.ack_h++;</span><br><span class="line">      Serial.print(<span class="string">"Ack High error,\t"</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      stat.unknown++;</span><br><span class="line">      Serial.print(<span class="string">"Unknown error,\t"</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  temperature = DHT.temperature;</span><br><span class="line">  humidity = DHT.humidity;</span><br><span class="line">  dewPoint(temperature,humidity);  </span><br><span class="line">  u8g.firstPage();  </span><br><span class="line">  <span class="keyword">do</span> &#123;</span><br><span class="line">    draw();</span><br><span class="line">  &#125; <span class="keyword">while</span>( u8g.nextPage() );</span><br><span class="line">  delay(<span class="number">2000</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">dewPoint</span><span class="params">(<span class="keyword">double</span> celsius, <span class="keyword">double</span> humidity)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">double</span> a = <span class="number">17.271</span>;</span><br><span class="line">  <span class="keyword">double</span> b = <span class="number">237.7</span>;</span><br><span class="line">  <span class="keyword">double</span> temp = (a * celsius) / (b + celsius) + <span class="built_in">log</span>(humidity/<span class="number">100</span>);</span><br><span class="line">  dewPoint1 = (b * temp) / (a - temp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;http://ackk.qiniudn.com/15322390095832.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;h1 id=&quot;所需硬件设备&quot;&gt;&lt;a href=&quot;#所需硬件设备&quot; class=&quot;headerlink&quot; title=&quot;所需硬件设备&quot;&gt;&lt;/a&gt;所需硬件设备&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&quot;text-align:center&quot;&gt;序号&lt;/th&gt;
+&lt;th style=&quot;text-align:center&quot;&gt;设备&lt;/th&gt;
+&lt;th style=&quot;text-align:center&quot;&gt;数量&lt;/th&gt;
+&lt;th style=&quot;text-align:center&quot;&gt;备注&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;1&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;Arduino&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;1&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;我用的是 Arduino UNO&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;2&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;OLED 显示屏&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;1&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;我用的是 IIC 的&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;3&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;温湿度传感器&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;我用 DHT22&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+    
+    </summary>
+    
+      <category term="物联网·大数据" scheme="http://www.bd7iwd.com/categories/%E7%89%A9%E8%81%94%E7%BD%91%C2%B7%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+    
+      <category term="Arduino" scheme="http://www.bd7iwd.com/tags/Arduino/"/>
+    
+      <category term="AM2302" scheme="http://www.bd7iwd.com/tags/AM2302/"/>
+    
+      <category term="DHT22" scheme="http://www.bd7iwd.com/tags/DHT22/"/>
+    
+      <category term="温湿度" scheme="http://www.bd7iwd.com/tags/%E6%B8%A9%E6%B9%BF%E5%BA%A6/"/>
+    
+      <category term="OLED" scheme="http://www.bd7iwd.com/tags/OLED/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>评《乌合之众》</title>
+    <link href="http://www.bd7iwd.com/posts/8a3c5d3d/"/>
+    <id>http://www.bd7iwd.com/posts/8a3c5d3d/</id>
+    <published>2018-05-21T15:20:21.000Z</published>
+    <updated>2018-05-21T15:29:40.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="http://oa8vl491c.bkt.clouddn.com/15269165753882.jpg" alt=""></p><p>“你是乌合之众吗？”要是有人问你这样可笑的问题，一定只能换取你的白眼。但如果换成问你：“那么你是谁呢？你之所以为你、而非他人的特质是什么呢？”相信不少人会为之语塞。法国著名社会心理学家古斯塔夫•勒庞于1895年著就的《乌合之众》，就精确地描述了人类所共有的心理——群体心理。即使在100多年后的今天读来，仍让我为其超越国度和时代的对人性的敏锐捕捉而叹服和心生寒意，我不得不悲哀的承认，在科技发达的今天，我们仍然是群体心理的奴隶，哪怕我一直在通过阅读和思考，渴望努力跳出意识形态和社会主流价值观的樊篱，却也不断在书中看到自己的影子。<br><a id="more"></a><br>何为群体？勒庞指出，并非只是简单的许多人凑在一块，而是指当一群人的感情与思想关注同一件事、且因巨大的刺激而个性消失时，他们就成为群体，并且具有暂时共同的心理特征——群体心理。群体随处可见，相同国家（中国人）、民族（汉人）、故乡（梅州人）、宗教（基督徒）、政治身份（共产党员）、阶层（农民阶级）、职业（军人）等特质都能符合形成群体的要求，甚至现在还出现了一些特殊的群体，比如公知、愤青、剩女等。而每个群体成员，大都身兼多种群体身份，在不同时刻显露出不同群体行为。就比如我，在高唱国歌时，我为自己的国家是世界第二大经济体而骄傲；在老乡会中，与操着乡音的故人谈起家乡的变化格外亲切；在单位的会议室里，为企业主的利益最大化不断绞尽脑汁；甚至，我从小到大与父母的共同生活，也成为最小范围的群体之一。写到这里，我们可以看出，群体是拥有相同价值观的一群人，受到相同的行为规则的驱使，从事着哪怕是身不由己的事情。</p><p>如果说这单纯的定义无法体现出群体的可怕之处，那么当你了解到形成群体的三个原因时，你一定会坐立难安：“当人群数量大到一定程度或情绪激动到某种程度时，群体的本能就会主宰其行为，摆脱道德和法律的约束，不承担责任，肆意妄为；在群体中，感性、本能的情绪特别容易传染，而冷静、理智丝毫不起任何作用，它会引起催眠式的反应，摧毁人的心理防御机制，且情感越不合常理就越易传染，使人感到前所未有的虚幻的强大。</p><p>群体中的人处于缺乏认知的无意识状态，类似迷信、无自控能力，而要进入状态，最大的力量是暗示的影响，群体只接受暗示，对明确的告诫置若罔闻。”个人的意识消失，任凭本能和暗示的作用行事，听起来多不可思议啊。可是历史上一次次的群体事件，无论是中世纪十字军东征的盲目，法国大革命的狂热，近代法西斯的疯狂，以及中国的十年浩劫，处处都能看到无意识群体的身影。</p><p>群体的特质——智力低下、冲动、易变、急躁、极端、无所畏惧、易受暗示与轻信、总是处于期待状态——在这些运动中表露无遗。尤其是在政治革命中，群体只是作为那些被他们推上神坛的领袖的棋子，无视现实、抛弃理性、被迷信与口号牵着鼻子走，进行充满破坏性而缺少建设性的行径。这只是愚昧本能的冲动宣泄，远不如和平改革的谨慎推进，但在历史上这样的革命却屡见不鲜。不仅仅是历史和政治，比如一些企业的营销洗脑让毫无主张的群体甘心把自己当成机器来使用，大量的心灵鸡汤为迷茫空虚的群体带来毫无实效的安抚，成功学的理念让屌丝群体每天早上起床对镜子高喊“我能行”，这些群体受到的强烈暗示，与那些找不到目标的十字军何其相似！</p><p>那么，我们是如何一步步沦为群体的一部分呢？勒庞说到，群体是外界刺激因素的奴隶。如果我们是群体一员的话，那么我们因何种刺激而成为奴隶呢？我不赞同人天生就具有奴性，更不认为将东方民族性简单归类为奴性。这种先天基因中所带有的特质，至多是由于地理气候和文化的印象所产生的适者生存的倾向。而最主要的价值观则是后天外界环境塑造而成。勒庞一针见血的指出——教育，尤其是向人灌输大量肤浅的知识、教人不出差错地背诵大量教科书的应试教育，不仅不可能提高人的智力水平，而且它让人们失去了独立思考的能力。当今的人们不知道如何做自己生活的主人，正是因为他们从他们的父母和学校中学到的只有两个字——服从。于是，当人们脱离单一的校园生活、离开细心呵护的家庭、面对残酷的生活现实时，对不安全感和无归属感的恐慌，让人们还来不及思考——也不具有思考能力——就轻易的将自己丢入了社会所谓的主流价值观中，被其裹挟，随波逐流，得过且过！</p><p>可是人们从不愿意承认自己的思想障碍，要么坚信“只要我努力，就一定会取得成功”而无视社会规则的制约，要么认定“所有问题都一定有答案，只不过我还没发现”而填鸭式的让自己塞入大量无法消化的知识，而最简单的无非是“听党的话、跟政府走、做中国梦”。这些做法都应证了人本主义哲学家和精神分析心理学家艾瑞克•弗洛姆在他的《逃避自由》一书中详细描述出这种现象：“平息怀疑的现代企图，无论是强制性地奋斗以渴求成功，还是坚信事实的无限知识可以回答对肯定的渴望，亦或臣服于一个负有‘肯定’责任的领袖，这些方案只能消除对怀疑的主观意识。”人类本来天生具有怀疑精神，可是可怕的服从教育，用各种看似理性的回答强制压抑住人类的怀疑。那份内心的怀疑和恐惧，借由对他人的群体犯罪而缓解，要么是以正义之名、行发泄之事，哪怕伤害他人也浑然不知，比如网络上动不动就吐水或人肉的“喷子”；要么是在家庭或恋情中的道德绑架，通过对他人并非必要的牺牲付出，强制要求得到相应的回报。这种种受到心理暗示而产生的群体犯罪，虽然造成的伤害比普通犯罪对于受害者更严重——比如2015年的“成都暴打女司机”事件的网络反响——但是群体都抱着法不责众的心态而听凭内心的阴暗面肆意作祟。当大多数人缺少价值立足点时，模仿便成为了最好的行事原则，经由传染达到普遍认可。其实，这正是群体数量的可怕之处，今人的所思所想都基于“所有人都在这样做，所以这样做一定是对的，我也只能这样做，我这样做一定能实现目标”的想法，缺乏自己的评判与思考能力、缺乏对主流的反抗精神、也缺乏承认错误的勇气。这就是当今的社会现状！</p><p>相比起来，许以来世的基督教能够给大部分西方人以精神信仰，而由于佛教进入中国的时候，华夏民族早已习惯跪伏于皇权之下，借以儒家思想来得到现实的回报，在近代中国君主制被推翻后，群体的偶像崇拜就从神和人身上，转移到对社会所灌输的价值观的崇拜和服从。在20世纪40年代是英雄主义大行其道、80年代群体崇尚自由和浪漫，而21世纪的今天则整齐划一为简单易懂的拜金主义和符合群体利益的功利主义。</p><p>如今的年轻人，基本上都是以李嘉诚、马云为代表的企业家为偶像，因为当人们明白百姓无缘触及政权的核心后，那些白手起家、创业致富的故事就特别具有煽动性和影响力，到处都在暗示“人人皆可成功”。然而，人们忽略了这些领袖所拥有的特殊品格和恰逢其时的好运气，以大无畏的精神向想象中的梦境闭眼直冲。当年轻人以功成名就为目标，却始终无法登峰时，在不再年轻和热情以后，个人价值观出现崩塌，“拔剑四顾心茫然”，便出现了普遍的“中年危机”现象。只不过，人们都只有在夜深人静、作为个体存在时，才会顿感被权利和物欲遮蔽双眼所带来的怀疑、痛苦和负罪感，对生而为人却无法主宰自己命运感到内疚和遗憾，于是最常见的做法，就是“不要想太多”，睡一觉醒来，再匆忙混迹于群体当中，抱团取暖，看到身边人们都过得心安理得，自然也就能暂时合理化解释和安抚自己的焦虑。</p><p>现代的人们期待有人来安排自己的生活，甚至是自己的想法，群体的潜在渴望成为群体意识大行其道的基础。如今，吐槽政府成为群体意识，生二胎成为群体意识，附庸风雅谈国学成为群体意识，最近疯狂炒虚拟货币也成为群体意识，我们似乎误以为这是文明的进步所带来的变化，但实际上，不论群体意识的具体要求和表现手法千变万化，不变的都是人生而为社会人或群体人的奴隶的真相。看似正常的生活，其实是抛弃了个人追求和个体差异性的不正常！</p><p>有人可能会悲哀而怯懦的问：“我们还有可能成为个人吗？”答案是肯定的，不然就不会出现超越于群体之上的领袖与游离于主流之外的“怪人”了。我们之所以会身不由己，不知不觉成为群体的一部分，是因为人从出生起，就几乎只受到父母与社会的价值观所影响，而父母的价值观其实也是由其祖辈和环境共同造就，若非有强烈的外部事件冲击而撼动社会思想的根基，那么成为社会群体往往是自然而然的事。然而，这绝非是一成不变的选择，要想摆脱群体，途径有二。</p><p>第一步就是远离群体。这种远离，并非像梭罗或鲁滨逊般过着与世隔绝的生活，而是通过了解群体的成因和特性，远离可能带来暗示的信号，尤其是在生活与媒体中宣传的流行观点，判断那些口号、鸡汤、软文的真伪和意义。人天生很难拒绝他人的怂恿，特别是来自群体的怂恿，人总是不可避免被人性中倾向群体心理的因素所影响，因此需要保持理性的清明，减少对他人认同的追求，退后一步，跳出群体嘈杂声音的包围，为心灵留出一片净土。以当今社会人与人合作的紧密关系而言，离群索居未必是最佳方案，建议可以保留世俗的身份，逐渐减少在那些典型群体价值观的人际圈中厮混，在认知上一点一滴的加以修正和改进，在行为上寻求稳定与变革之间的微妙平衡点。“大隐隐于市”，是对世俗的主动妥协，而非被动接受的无奈之举。只不过，聪明的自我意识，会安全地避开一切可能的反叛习惯的想法，因此人们必将只能在长时间的水滴石穿中渐进改变，绝非一朝一夕之功。</p><p>同时，要想有内在的力量抵御“他人即地狱”的魔障，则需要建立属于自己的、明确的价值观，这便是第二步。人与动物的最大差别，就是拥有独立思考和自省的能力，只不过我们大多数人从未掌握和发挥这种潜力应用在自身的成长上，单纯的强调考试解题的智商或人际关系的情商罢了。于是，个人对生活本质的理解力与思考力的丧失，加强了对群体意识错误判断的屈服，从而进一步反噬我们残余的智力，强化对自身无能的认知。</p><p>其实，我们往往会发现，在从事某些不情愿的行为时，内心会出现鲜明的痛苦、挣扎、反抗或暴力等抵触心理，这就是人在脱离了群体意识控制下的本能反抗，是属于个人无意识显露出来的本我。我们应抓住这样真实的感性情绪，用理性来剖析自己真正想要什么，这就开始向自我价值观的塑造路上迈进。产生质疑是思考的起点，而大量的阅读则是提供自省的切入点和内化于心的思维素材。阅读的作用不应再是学校中要求的对知识的背诵，而应强调加深理解和感悟，求“道”而非求“术”。从历经百年而屹立不倒的经典作品着手，结合对生活的反思，以他山之玉攻己之石。庆幸的是，每个人与生俱来就拥有思考的能力，不同的只是对于自我执行力的要求，能否延迟满足感成为是否做到知行合一的关键因素。当实践不断加深和巩固自我的崭新认知以后，多元的价值观、多样的世界观、多重的人生观将为我们开启崭新的可能。如果说群体意识让你看到的世界，是他们要求你接受的景象，那么现在，真实客观的大千世界尽在眼前呈现。</p><p>勒庞在文中还为我指出了曾经的执念。我在建立自身价值观的同时，总是试图帮助他人逃脱群体的控制，可总是乘兴而来、败兴而归。勒庞提出，群体不存在理性，也不愿接受理性。那些所谓的意见领袖，也不过是顺应民意，而非超前于民意。要想撼动群体的观点，只能用另一种群体暗示技巧来取而代之，而非靠说理能见成效。曾几何时，我一直苦恼于该如何立足于世俗之中，该迎合、该放弃、还是站在平衡的针尖上？</p><p>处在苍茫人世，只有认清万事万物运行的宇宙规律，才能游弋于其中，进退自如。历史的变迁本就由那些自主的个体和盲目的群体所共同推动，这是规律的使然，我能做的只能是超然于其外，再浸淫于其内。如今的我，拥有屈指可数的同路伙伴，共同走在探索的道路上，虽然彼岸仍充满着迷雾，但我从未像今天这样走的坚定。</p><p>我永远忘不了乔治•奥威尔在《一九八四》中的一句话，“除非他们觉醒，否则永远不会反抗，但除非他们反抗，否则不会觉醒”。我也愿将这句话送给今日之乌合之众。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;http://oa8vl491c.bkt.clouddn.com/15269165753882.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;“你是乌合之众吗？”要是有人问你这样可笑的问题，一定只能换取你的白眼。但如果换成问你：“那么你是谁呢？你之所以为你、而非他人的特质是什么呢？”相信不少人会为之语塞。法国著名社会心理学家古斯塔夫•勒庞于1895年著就的《乌合之众》，就精确地描述了人类所共有的心理——群体心理。即使在100多年后的今天读来，仍让我为其超越国度和时代的对人性的敏锐捕捉而叹服和心生寒意，我不得不悲哀的承认，在科技发达的今天，我们仍然是群体心理的奴隶，哪怕我一直在通过阅读和思考，渴望努力跳出意识形态和社会主流价值观的樊篱，却也不断在书中看到自己的影子。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="文学·读书" scheme="http://www.bd7iwd.com/categories/%E6%96%87%E5%AD%A6%C2%B7%E8%AF%BB%E4%B9%A6/"/>
+    
+    
+      <category term="乌合之众" scheme="http://www.bd7iwd.com/tags/%E4%B9%8C%E5%90%88%E4%B9%8B%E4%BC%97/"/>
+    
+      <category term="社会心理" scheme="http://www.bd7iwd.com/tags/%E7%A4%BE%E4%BC%9A%E5%BF%83%E7%90%86/"/>
+    
+      <category term="群体心理" scheme="http://www.bd7iwd.com/tags/%E7%BE%A4%E4%BD%93%E5%BF%83%E7%90%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>大圣归来</title>
+    <link href="http://www.bd7iwd.com/posts/a9a5a685/"/>
+    <id>http://www.bd7iwd.com/posts/a9a5a685/</id>
+    <published>2018-03-22T14:55:14.000Z</published>
+    <updated>2018-03-22T15:15:25.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一"><a href="#一" class="headerlink" title="一"></a>一</h2><p>我问猴子，都成佛五百年了，你寂寞吗？<br>猴子说我寂寞你妈。<br>我说你是斗战胜佛，不要这么暴躁，况且我是一头猪，你寂寞我妈，也没有用，生殖隔离。<br>猴子一个桃子扔过来塞我嘴上。<br>猴子开始读经书，他读诸行无常，一切皆苦。诸法无我，寂灭为乐。<br>凡所有相，皆是虚妄。若见诸相非相，即见如来。<br>我叹口气，说孙猴子，你的金箍棒多久没拿出来过了？<br>猴子在水帘洞口坐成一尊佛像，没有回答。<br><a id="more"></a></p><h2 id="二"><a href="#二" class="headerlink" title="二"></a>二</h2><p>我知道猴子不寂寞。<br>有一万只猴子陪着他，他寂寞个劳什子。<br>我寂寞，我没有另外一万只猪陪着我。<br>别别别，我也不想要一万只猪陪着我。<br>隔西游已经五百年，面对我的九齿钉耙，我还能想起，九九八十一难结束的那天下午。<br>大雷音寺、光华闪耀，是立地成佛，无可救药。<br>无可救药的无聊。<br>这无聊已经持续了五百年。<br>真是猪生苦长。</p><h2 id="三"><a href="#三" class="headerlink" title="三"></a>三</h2><p>照理说，我不应该这么想。<br>沙悟净那个没脑子的，还问我，二师兄，现在万世太平，世人研修佛法，你怎么还不满足呢？<br>我一个钉耙就扔他头上，万世太平有什么好的，你个傻子。<br>万世太平，人没人性、妖没妖性，你看看现在这些妖精，出来劫个人吃都要想着天上的神仙爸爸看着，心惊胆战的，要么就是收编进了佛法大队，当个妖界眼线，无不无聊？<br>沙悟净说，有聊。<br>我说你走吧。<br>沙悟净说好的二师兄。<br>我说站住，我他妈叫你走你还真走了？<br>沙悟净说二师兄还有啥事？<br>我叹口气，什么都没说。<br>我说我们几个，加上那匹蠢马，有空一起聚个餐。</p><h2 id="四"><a href="#四" class="headerlink" title="四"></a>四</h2><p>二郎神说，天蓬你就是，太闲了，要不帮我管管事，捉拿两个小妖精也是好的。<br>我说去你的。<br>我看一眼月亮，清辉散散，寒光漫漫，像一颗绕着棉花糖的珠子。<br>二郎神说别看了，再看多少眼都没用。<br>你是净坛使者，不是天蓬元帅。<br>你要立地成佛，不要儿女情长。<br>我说老子看个月亮，你也要跟我说大道理？<br>杨戬，跟你讲老实话，我只是觉得，太无聊了。<br>你说活这么久，却得不到自己想要的东西，有什么意思？<br>二郎神三只眼睛都闭上，他说老猪，你好好读读佛法。<br>读读佛法，你心就清净了。<br>我说我都读了一万遍了，这五百年我读的佛法还不够多？<br>但为何这世间佛法，都不能降我心中火？<br>而唯独只有这月亮，能度我千万世蹉跎？</p><h2 id="五"><a href="#五" class="headerlink" title="五"></a>五</h2><p>我也不是没有想过，披上当年的铠甲，拿上我的钉耙，会一会九天神佛，上那广寒宫去，折一朵桂花与佳人相送。<br>像是死也不足惜。<br>在这件事情上，那猴子确实是我偶像。<br>但现在连偶像都成了佛，你说我还有什么斗志？<br>我不能像以前那样，说大师兄，我们去闯一闯那南天门，杀他个七进七出，好不好？<br>猴子肯定说，佛法无边，八戒你还是静静修行。<br>我修你个大头鬼。<br>有些人天生就是佛，有些人天生就是凡人。<br>我再修行一百万年，还是一只凡心猪。<br>你强求我一只猪去当佛，跟你和我妈的生殖隔离，有什么差别？</p><h2 id="六"><a href="#六" class="headerlink" title="六"></a>六</h2><p>但是吧，想法归想法，现实归现实。<br>我要是真上南天门闹腾一番，第一下就给杨戬这小子拿下了。我又不是孙悟空，猴子跟猪的差别，比人跟人不知道大到哪里去了。<br>我不会七十二变，九齿钉耙也比不上那定海神针，那猴子法力通天，我能干什么？<br>他可以大闹天宫，我只能大跪天宫。<br>这天庭和佛界，妖怪与人间，像一个个卡的刚好的精密齿轮，这世界就这么毫无违和地完美运转，似乎大家都不觉得无聊。<br>如来不无聊，玉帝不无聊，现在好了，连你个孙猴子，也说不无聊。<br>你说你法力通天，一人可当十万天兵，可还不是像个普通人一样，打坐念经？<br>无聊不无聊？<br>无聊透了。<br>这世界，让佛祖的归佛祖，玉帝的归玉帝。<br>就是这么他妈无聊得好。</p><h2 id="七"><a href="#七" class="headerlink" title="七"></a>七</h2><p>我跟杨戬聊天吹水的时候，这小子跟我说，最近妖界不太平。<br>我说现在这妖界，一个个都老实得很，就算他爹是牛魔王的，都要给观音当个童子，你说其他妖精还有什么混头，当妖的是一年不如一年好玩。<br>杨戬说你还真别说，这次这妖，有点本事。<br>这妖先袭人间，玉帝排下去的天兵天将，一个个都被吃了，一个回来的都没有。<br>我心里一惊，嘴上说这算个啥，当年你们十万天兵，连那只猴子也没挡得住。<br>杨戬说我感觉，这次问题有点大。<br>我说那你怎么不下去拿它？<br>他说快了。下次，应该就是我去了。<br>他说天蓬，说真的，冥冥之中我感觉，我这次可能有去无回。<br>我说哈哈哈哈二郎神，你记得到阴曹地府了帮我问候下阎王爷，看他老人家最近身体好吗。<br>杨戬把三尖两刃枪一提，寒光点点。他说天蓬，你记住，如果这世道有变，你就上广寒宫。<br>一定要上广寒宫。<br>我说你他妈说什么？<br>杨戬已经乘云走远。</p><h2 id="八"><a href="#八" class="headerlink" title="八"></a>八</h2><p>我听不懂杨戬在说什么，我也不想搞懂。<br>这小子，就是喜欢装逼。<br>生下来非要长三只眼睛，拿个兵器还是个啥玩意儿三尖两刃枪，还带条哈士奇，年轻时候还啥玩意儿劈山救母，声势浩大，都能评上感动天庭十大人物。<br>真是有趣。<br>这小子正经的很，也高傲得很，但这几百年来，除了猴子，就这小子愿意跟我聊聊天。<br>当然前提是他不能叫我猪刚鬣。<br>我一个不正经的猪，跟一个正经的神仙聊天，还挺好玩。<br>后来孙猴子跟我说，杨戬死了。<br>我说死猴子，你说什么玩意儿？<br>这猴子浑身毛发发出火光，他说二郎神，死了。<br>我说你逗我呢，当年南天门你不就是被他给摆一道，这小子法力高强，下去降个妖就能死？<br>猴子看着水帘洞外下着的瓢泼大雨，说这妖，不凡。<br>我说去你妈的，我不信。<br>我不信，这个长三只眼的小子，就这么魂飞魄散了？<br>我上天庭，看众仙皆戚戚然。<br>太白金星说这妖怪实在是被低估了，不曾想二郎神也敌不过他，需要从长计议。<br>众仙称是。<br>我当下就火上三丈，我说你们这群劳什子玩意儿，当年抓猴子的时候一个个能得很，现在杨戬都死了，还不赶紧召集他妈的十万天兵下去擒那妖怪？<br>玉帝瞥我一眼说，你这猪头，无用无谋，倒是喜欢耍嘴皮子，你怎么不自己下去擒那妖给他报仇？<br>我心中凛然，热血激荡，九齿钉耙一横，背对众仙，说我老猪今天，也让你们这些太平日子过久了的神仙看一看，什么是他妈的骨气。<br>我黑衣玄冠金甲加身，飞离南天门。<br>这一刻，我不是猪八戒，也不是什么净坛使者。<br>我是天蓬元帅。</p><h2 id="九"><a href="#九" class="headerlink" title="九"></a>九</h2><p>当然飞出南天门之后，云上凛冽的寒风吹得我的热血有点凉。<br>我觉得我需要冷静一下。<br>当一只冷静的猪。<br>做一只特立独行的猪，是有代价的，像那个特立独行的傻子，就送了性命。<br>我看着这九齿钉耙，感觉并不如杨戬的三尖两刃刀拉风。<br>那威力肯定也差了几个档次。<br>这五百年，我的法力跟西游时候相比，长进甚微。<br>连杨戬都搞不定的妖怪，我去不是送死吗。<br>杨戬啊杨戬，你能劈山，你能遛狗，我都服，你能不能不要逞能？<br>你都知道有去无回，还是去了，你是不是真的蠢？<br>我去花果山，发现猴子已经打坐入定。<br>坐在花果山之顶，宛若从未出生过一样。<br>我说猴子，你跟我去，我们兄弟俩，联手把那个妖给干了。<br>猴子不说话。<br>我说孙悟空，杨戬跟你称兄道弟上千年，他死了，魂飞魄散了，给妖吃了，你就这么打坐，给他超度？<br>猴子不说话。<br>我说那也罢，你们都是一群懦夫，我老猪一个人去，一个人去给他报仇。<br>你们都他妈的立地成佛去吧。<br>我转身离去，悲从中来。<br>我知道我没那个勇气。<br>没有这猴子挡在我面前，我他妈的就是个废物。<br>我这九齿钉耙，黑甲玄衣，都是他妈的纸糊的一样。<br>我知道这满天神佛，都在看着我笑话。<br>八戒啊八戒，即算这么多年过去，你还只是一头猪。<br>只是一头蠢猪。</p><h2 id="十"><a href="#十" class="headerlink" title="十"></a>十</h2><p>我乘云去南海，想着这妖屠戮世人，观音应当要出来管一管，帮个忙也好。<br>却不料南海妖气滔天。<br>整个普陀山，失去庄重的气氛，一片惨淡。<br>不祥之兆。<br>紫竹林东倒西歪，我一眼看到，观音身边的小蛇女被钉死在紫竹林旁崖壁之上，她的胸前赫然插着一把三尖两刃刀。<br>已经断了气息。<br>整个普陀山，了无生机，连一只活着的苍蝇都没有。<br>我到处找观音，观音不见踪影。<br>整个普陀山，似乎只有我，与海浪的声音。<br>我站在这无尽阒寂之中，感受这妖怪滔天妖气。<br>它似乎，就在海底。</p><h2 id="十一"><a href="#十一" class="headerlink" title="十一"></a>十一</h2><p>当然我肯定是不会去海底的。<br>开什么玩笑，这可是观音菩萨啊。<br>平时她丢一个法宝都能解决事情，现在她菩萨入海，自身难保。<br>我也只能干看着。<br>这件事，已经远比我想象之中严重。<br>我能感受到，以这南海为根，妖气正逐渐强大，四面呼应而起。<br>妖界四方竟隐隐在呼应这绝世巨妖。<br>我能感受到，天庭也一定可以。这些乱七八糟的神仙，现在都不知道慌成什么样了。<br>我腆着脸又飞回一次天庭，看到天兵天将正不断集结。<br>太白金星跟我说，这妖界似乎已经揭竿而起，四处妖怪作乱，为祸人间。<br>比当年那妖猴，要可怕得多。<br>我说那观音呢？<br>太白金星摇摇头，双手合掌，说阿弥陀佛。<br>九天诸佛，也将顺势铲妖。<br>天兵天将，即刻准备出征。<br>只是苦了这凡俗人间。<br>都是生灵涂炭，哀鸿遍野。</p><h2 id="十二"><a href="#十二" class="headerlink" title="十二"></a>十二</h2><p>我与李靖哪吒父子，还有大部队的天兵天将，一同来到南海。毕竟我还没见过这妖怪长啥样。这妖盘踞南海，卷起巨大漩涡。漩涡之中黑气与佛光竟交融纵横，十分奇诡。李靖凝眉而视，说这佛光怕是从观音而来，这怪物竟能将佛气也为自身所用，了不得，了不得。十万天兵，都严阵以待。突然一个瞬间，海面破开，一条黑色巨蛇长着硕大双翼，带着如地狱之火的黑炎喷薄而出，直冲天际。遮天蔽日，有鬼神之威。腾空而起，竟扶摇万里。<br>这黑蛇居然是一条深山巨蛇。<br>巨蛇扬天吟啸，海水似被巨大力量击打一般，掀起海啸，海浪冲起千丈，向众天兵天将袭来。<br>李靖玲珑宝塔祭出，哪吒混天绫迎风变作万丈，堪堪将水势挡下。众天兵天将使用法力，先锋冲阵，对着这巨蛇砍下第一波攻势。这巨蛇额前有个圆形标记，此刻正发出慢慢清辉，玄气纵横，竟形成一个八卦巨阵，将先锋的天兵天将都碾了过去。<br>这是道家的法力。这巨蛇的本源之力，竟然是道家之力。这蛇明明是一条深山巨蛇，战力惊人不说，从何而来不知，但其本源之力，竟然是玄气。我感到脊背发凉。我忽然想到杨戬跟我说的，他说天蓬，你记住，如果这世道有变，你就上广寒宫。一定要上广寒宫。<br>我转身腾云而去。直奔广寒宫。</p><h2 id="十三"><a href="#十三" class="headerlink" title="十三"></a>十三</h2><p>三十六重天，如今一片狼藉。广寒宫旁，月桂树上，挂着吴刚的尸体。广寒宫内坐着一人，天庭钥匙在他手中中。竟是玉帝。<br>他眉间黑气纵横，与玄气清光缠绕一起，跟那恶蛇一样，诡异之极。我九齿钉耙一展，跃进广寒宫，说你这老不死的，是中了什么邪。玉帝说你这蠢猪，前线送死不成，逃回这来，还想逞什么好汉？<br>可省省吧，就你这卑微法力，钉耙武器，猪头猪脑，也想做那金甲圣衣的盖世英雄？我说玉帝，你真是心狠手辣，为了养那条蛇，你连自己外甥都舍得搭进去。是杨戬叫我来广寒宫。那蛇是道家正宗玄气所养，你他妈个天庭领袖，竟然跟恶蛇勾结，祸害人间？真是白瞎了三清的眼。玉帝笑了笑，摇摇头说，猪刚鬣，皈依五百年了，你寂寞吗？<br>我说我寂寞你妈。<br>玉帝说你才五百年，我呢？我历经一千七百五十劫，每劫十二万九千六百年，方得玉帝之位，无极之道。<br>我比你活的久太多了，也比你活的无聊太多了。你说活在这个世界上，得不到自己要的东西，又有什么开心？<br>你可知道，我比你，更向往这不在五行之中的自由？你可知道，我比你，更痛恨这秩序井然繁琐的天庭？<br>你以为我看向着广寒宫的次数，比你猪刚鬣看得少？<br>我说我管你妈，你要以这么多人为代价换个自由，我天蓬就要拿你下来。你又以为，这世界上，哪个凡人神仙，活的轻松吗？活的是自己所想吗？<br>玉帝说可惜了，猪刚鬣，你来的太晚了。那蛇是我偶然在西天所得，自幼吸混沌玄气，如今汇合佛道妖三家之力，就凭那十万天兵，没有二郎神，连个孙猴子都降不住，又怎么挡得了这冥蛇。我说佛祖会挡你，就像当年他收那只猴子那样。玉帝哈哈大笑，说猪刚鬣，你还真是天真。这天庭倒塌，你以为那如来老儿，会不高兴吗？<br>当年那猴子大闹天宫，搅得天翻地覆，若不是我去请那如来，他会理这天庭半分吗？这世界，佛道终不两立，一山怎能容二虎。他巴不得看我这天庭被毁，他好将这世界佛道统一。只是这如来老儿没想到，这蛇却是我养的。<br>话音刚落，整个广寒宫轰然倒塌，那黑色巨蛇身影蓦然出现在了月宫之上。张牙舞爪，浴血咆哮。看来那十万天兵，竟不能挡这冥蛇半步。玉帝腾跃空中，与蛇合二为一，他仙体融进蛇身，这蛇身上泛出点点清光，而后像恒星一样将整个三十六重天照亮。<br>他说猪刚鬣，你看，我已经自由了。这天地再不能挡我半分，便是如来老儿亲自过来，也拿我没有办法。<br>天庭钥匙归我，这天地也都归我。没有三清与诸佛，只有我。这三十六重天，七十二重地，唯我独尊。我看着他，仙不仙，妖不妖，可悲之极。<br>我摇摇头。<br>我说玉帝，你算错了。</p><h2 id="十四"><a href="#十四" class="headerlink" title="十四"></a>十四</h2><p>你算错了。蛇体妖气纵横，他咆哮着说我算错了什么？我说你千算万算，也想不到为什么二郎神要从容赴死。<br>因为他知道这世上，定有一个人会来，即算如来不行，三清也不行，这个人也一定会来。这人是你命中克星，即算你经过一千七百五十劫，他就是你的一千七百五十一劫。这人一千年前就让你束手无策，而到如今，也还是一样。他是这个世界，披着金甲圣衣的盖世英雄。<br>那蛇妖气与玄气交织，汹涌法力击打在我身上，我倒飞出去，意识模糊。我失去意识前的最后，看到一个头戴紫金冠、身披黄金甲的身影。和那一根一万三千五百斤的金箍棒。我默念说猴子，今天你不是什么猴王，不是什么斗战胜佛。你是齐天大圣。</p><h2 id="十五"><a href="#十五" class="headerlink" title="十五"></a>十五</h2><p>很多年以后，我问猴子，你成佛这么久了，你寂寞吗？猴子说我寂寞你妈。我说猴子，不能过了这么几百年，你还惦记着我妈，我说过了，有生殖隔离。猴子说你他妈不闭嘴，我就惦记天庭钥匙去。我说好好好，我闭嘴，你惦记谁都可以，我妈都行，但是天庭钥匙不行，蛇那是我老婆。<br>但你能跟我说说那天你怎么打败玉帝的吗？<br>猴子说：我不说。<br>猴子说，诸行无常，一切皆苦。诸法无我，寂灭为乐。<br>凡所有相，皆是虚妄。若见诸相非相，即见如来。<br>我说好好好，你牛逼，你比唐三藏还牛逼。<br>猴子不说话了。<br>猴子说，新的天庭和玉帝都有了，往事就不要再提。<br>让佛祖的归佛祖，玉帝的归玉帝。<br>阿弥陀佛。<br>还有。<br>猴子转过头来。<br>有空我们一起，聚个餐吧。</p><h2 id="完。"><a href="#完。" class="headerlink" title="完。"></a>完。</h2>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;一&quot;&gt;&lt;a href=&quot;#一&quot; class=&quot;headerlink&quot; title=&quot;一&quot;&gt;&lt;/a&gt;一&lt;/h2&gt;&lt;p&gt;我问猴子，都成佛五百年了，你寂寞吗？&lt;br&gt;猴子说我寂寞你妈。&lt;br&gt;我说你是斗战胜佛，不要这么暴躁，况且我是一头猪，你寂寞我妈，也没有用，生殖隔离。&lt;br&gt;猴子一个桃子扔过来塞我嘴上。&lt;br&gt;猴子开始读经书，他读诸行无常，一切皆苦。诸法无我，寂灭为乐。&lt;br&gt;凡所有相，皆是虚妄。若见诸相非相，即见如来。&lt;br&gt;我叹口气，说孙猴子，你的金箍棒多久没拿出来过了？&lt;br&gt;猴子在水帘洞口坐成一尊佛像，没有回答。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="文学·读书" scheme="http://www.bd7iwd.com/categories/%E6%96%87%E5%AD%A6%C2%B7%E8%AF%BB%E4%B9%A6/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>我的2017年网络收藏夹整理汇总</title>
+    <link href="http://www.bd7iwd.com/posts/1fe758ef/"/>
+    <id>http://www.bd7iwd.com/posts/1fe758ef/</id>
+    <published>2018-02-03T11:55:38.000Z</published>
+    <updated>2018-02-03T12:05:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="我的收藏"><a href="#我的收藏" class="headerlink" title="我的收藏"></a>我的收藏</h1><h2 id="工具·技术"><a href="#工具·技术" class="headerlink" title="工具·技术"></a>工具·技术</h2><table><thead><tr><th style="text-align:center">序号</th><th style="text-align:center">名称</th><th style="text-align:center">原文</th><th style="text-align:center">来源</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td style="text-align:center">如何优雅的使用jupyter？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/59392251" target="_blank" rel="noopener">https://www.zhihu.com/question/59392251</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">2</td><td style="text-align:center">Excel数据可视化分析方法大全</td><td style="text-align:center"><a href="https://zhuanlan.zhihu.com/p/25267356" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/25267356</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">3</td><td style="text-align:center">数据分析，除了Excel数据透视表，还有什么工具？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/38078813" target="_blank" rel="noopener">https://www.zhihu.com/question/38078813</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">4</td><td style="text-align:center">经常丢三落四，使用这11 款工具来进行知识管理吧</td><td style="text-align:center"><a href="https://zhuanlan.zhihu.com/p/22766208" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/22766208</a></td><td style="text-align:center">知乎</td></tr></tbody></table><a id="more"></a><h2 id="知识拓展"><a href="#知识拓展" class="headerlink" title="知识拓展"></a>知识拓展</h2><table><thead><tr><th style="text-align:center">序号</th><th style="text-align:center">名称</th><th style="text-align:center">原文</th><th style="text-align:center">来源</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td style="text-align:center">如何跟弱智室友解释「什么是区块链」</td><td style="text-align:center"><a href="https://zhuanlan.zhihu.com/p/28968730" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/28968730</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">2</td><td style="text-align:center">大数据与区块链</td><td style="text-align:center"><a href="https://zhuanlan.zhihu.com/p/25531754" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/25531754</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">3</td><td style="text-align:center">LTE (Bands 1, 2, 3, 4, 5, 8, 13, 17, 19, 20, 25) 怎么理解？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/21769646" target="_blank" rel="noopener">https://www.zhihu.com/question/21769646</a></td><td style="text-align:center">知乎</td></tr></tbody></table><h2 id="工作资源"><a href="#工作资源" class="headerlink" title="工作资源"></a>工作资源</h2><table><thead><tr><th style="text-align:center">序号</th><th style="text-align:center">名称</th><th style="text-align:center">原文</th><th style="text-align:center">来源</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td style="text-align:center">在哪里能找到各行业的分析研究报告？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/19766160" target="_blank" rel="noopener">https://www.zhihu.com/question/19766160</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">2</td><td style="text-align:center">有哪些「神奇」的数据获取方式？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/32164316" target="_blank" rel="noopener">https://www.zhihu.com/question/32164316</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">3</td><td style="text-align:center">如何制作图表非常精美的 Excel 文档？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/24450523" target="_blank" rel="noopener">https://www.zhihu.com/question/24450523</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">4</td><td style="text-align:center">17款工具让你的数据更美观</td><td style="text-align:center"><a href="https://www.toutiao.com/item/6515147849129263620/" target="_blank" rel="noopener">https://www.toutiao.com/item/6515147849129263620/</a></td><td style="text-align:center">今日头条</td></tr><tr><td style="text-align:center">5</td><td style="text-align:center">花了三万学费学的赚钱思维</td><td style="text-align:center"><a href="https://www.toutiao.com/item/6482605376914063885/" target="_blank" rel="noopener">https://www.toutiao.com/item/6482605376914063885/</a></td><td style="text-align:center">今日头条</td></tr></tbody></table><h2 id="业内行情"><a href="#业内行情" class="headerlink" title="业内行情"></a>业内行情</h2><table><thead><tr><th style="text-align:center">序号</th><th style="text-align:center">名称</th><th style="text-align:center">原文</th><th style="text-align:center">来源</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td style="text-align:center">针对中小企业的 SaaS 服务为什么在中国一直做不起来？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/19575248" target="_blank" rel="noopener">https://www.zhihu.com/question/19575248</a></td><td style="text-align:center">知乎</td></tr></tbody></table><h2 id="乱七八糟"><a href="#乱七八糟" class="headerlink" title="乱七八糟"></a>乱七八糟</h2><table><thead><tr><th style="text-align:center">序号</th><th style="text-align:center">名称</th><th style="text-align:center">原文</th><th style="text-align:center">来源</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td style="text-align:center">无线电爱好者是个什么样的群体？对于他们而言这个爱好的乐趣点在哪？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/26293877" target="_blank" rel="noopener">https://www.zhihu.com/question/26293877</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">2</td><td style="text-align:center">有哪些对树莓派的有趣改造和扩展应用？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/20697024" target="_blank" rel="noopener">https://www.zhihu.com/question/20697024</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">3</td><td style="text-align:center">所谓「忘记」，是大脑没有储存，还是有储存但检索不到？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/21484205" target="_blank" rel="noopener">https://www.zhihu.com/question/21484205</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">4</td><td style="text-align:center">4chan.org 是个什么网站？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/20249732" target="_blank" rel="noopener">https://www.zhihu.com/question/20249732</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">5</td><td style="text-align:center">如果光可以因引力而弯曲路径，那么宇宙中的空间位置是如何确立的？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/34413438" target="_blank" rel="noopener">https://www.zhihu.com/question/34413438</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">6</td><td style="text-align:center">八卦五行基础知识入门</td><td style="text-align:center"><a href="https://www.toutiao.com/item/6404382027012899329/" target="_blank" rel="noopener">https://www.toutiao.com/item/6404382027012899329/</a></td><td style="text-align:center">今日头条</td></tr></tbody></table><h2 id="阅读·学习"><a href="#阅读·学习" class="headerlink" title="阅读·学习"></a>阅读·学习</h2><table><thead><tr><th style="text-align:center">序号</th><th style="text-align:center">名称</th><th style="text-align:center">原文</th><th style="text-align:center">来源</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td style="text-align:center">哪部小说的开头堪称神来之笔？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/29775601" target="_blank" rel="noopener">https://www.zhihu.com/question/29775601</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">2</td><td style="text-align:center">有哪些令你惊艳的一句话或诗句？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/51543684" target="_blank" rel="noopener">https://www.zhihu.com/question/51543684</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">3</td><td style="text-align:center">如何看待「少不读水浒，老不读三国」的说法？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/58019806" target="_blank" rel="noopener">https://www.zhihu.com/question/58019806</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">4</td><td style="text-align:center">佛陀是否窥见了宇宙的真理？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/54943429" target="_blank" rel="noopener">https://www.zhihu.com/question/54943429</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">5</td><td style="text-align:center">94则道破生活之美的诗词佳句</td><td style="text-align:center"><a href="https://zhuanlan.zhihu.com/p/24555998" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/24555998</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">6</td><td style="text-align:center">汇率的本质是什么？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/21280286" target="_blank" rel="noopener">https://www.zhihu.com/question/21280286</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">7</td><td style="text-align:center">如何高效地阅读一本书</td><td style="text-align:center"><a href="https://zhuanlan.zhihu.com/p/24040173" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/24040173</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">8</td><td style="text-align:center">假如冥币过多，会不会导致阴间通货膨胀？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/38994081" target="_blank" rel="noopener">https://www.zhihu.com/question/38994081</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">9</td><td style="text-align:center">网易云音乐有哪些有趣的评论？</td><td style="text-align:center"><a href="https://www.zhihu.com/question/46220746" target="_blank" rel="noopener">https://www.zhihu.com/question/46220746</a></td><td style="text-align:center">知乎</td></tr><tr><td style="text-align:center">10</td><td style="text-align:center">如何评价木心说哈代和陀思妥耶夫斯基(的小说位置)是一流的，而普鲁斯特、乔伊斯不如他们?</td><td style="text-align:center"><a href="https://www.zhihu.com/question/49197572" target="_blank" rel="noopener">https://www.zhihu.com/question/49197572</a></td><td style="text-align:center">知乎</td></tr></tbody></table><h2 id="影音·综合"><a href="#影音·综合" class="headerlink" title="影音·综合"></a>影音·综合</h2><table><thead><tr><th style="text-align:center">序号</th><th style="text-align:center">名称</th><th style="text-align:center">原文</th><th style="text-align:center">来源</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td style="text-align:center">木心纪录片：归来的局外人</td><td style="text-align:center"><a href="https://www.toutiao.com/item/6395359693383926274/" target="_blank" rel="noopener">https://www.toutiao.com/item/6395359693383926274/</a></td><td style="text-align:center">今日头条</td></tr></tbody></table>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;我的收藏&quot;&gt;&lt;a href=&quot;#我的收藏&quot; class=&quot;headerlink&quot; title=&quot;我的收藏&quot;&gt;&lt;/a&gt;我的收藏&lt;/h1&gt;&lt;h2 id=&quot;工具·技术&quot;&gt;&lt;a href=&quot;#工具·技术&quot; class=&quot;headerlink&quot; title=&quot;工具·技术&quot;&gt;&lt;/a&gt;工具·技术&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&quot;text-align:center&quot;&gt;序号&lt;/th&gt;
+&lt;th style=&quot;text-align:center&quot;&gt;名称&lt;/th&gt;
+&lt;th style=&quot;text-align:center&quot;&gt;原文&lt;/th&gt;
+&lt;th style=&quot;text-align:center&quot;&gt;来源&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;1&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;如何优雅的使用jupyter？&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://www.zhihu.com/question/59392251&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.zhihu.com/question/59392251&lt;/a&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;知乎&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;2&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;Excel数据可视化分析方法大全&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/25267356&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://zhuanlan.zhihu.com/p/25267356&lt;/a&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;知乎&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;3&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;数据分析，除了Excel数据透视表，还有什么工具？&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://www.zhihu.com/question/38078813&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.zhihu.com/question/38078813&lt;/a&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;知乎&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;4&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;经常丢三落四，使用这11 款工具来进行知识管理吧&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/22766208&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://zhuanlan.zhihu.com/p/22766208&lt;/a&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;知乎&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+    
+    </summary>
+    
+      <category term="网络·计算机" scheme="http://www.bd7iwd.com/categories/%E7%BD%91%E7%BB%9C%C2%B7%E8%AE%A1%E7%AE%97%E6%9C%BA/"/>
+    
+    
+      <category term="互联网" scheme="http://www.bd7iwd.com/tags/%E4%BA%92%E8%81%94%E7%BD%91/"/>
+    
+      <category term="学习" scheme="http://www.bd7iwd.com/tags/%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="收藏" scheme="http://www.bd7iwd.com/tags/%E6%94%B6%E8%97%8F/"/>
+    
+      <category term="综合" scheme="http://www.bd7iwd.com/tags/%E7%BB%BC%E5%90%88/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【转载】比特大陆把台积电12nm产能全抢了</title>
+    <link href="http://www.bd7iwd.com/posts/deeedaf4/"/>
+    <id>http://www.bd7iwd.com/posts/deeedaf4/</id>
+    <published>2018-02-01T07:54:22.000Z</published>
+    <updated>2018-02-01T09:26:24.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>集微网消息，今日在联发科2017年第四季度财报法人说明会上，投资者提问透露出一个信息：台积电12nm产能已经被比特大陆占满了。虽然包括中国在内的多个国家和地区已经计划对比特币在内的数字加密货币进行打击，但比特币挖矿热潮仍然持续不退，半导体产业链仅从比特大陆一家就受益良多。<a id="more"></a></p><p>设计环节，2017年比特大陆芯片销售额达到了惊人的143亿元人民币，仅次于华为海思，成为中国第二大的IC设计公司。一位早期矿工称，2017年比特大陆每月利润可达3000万美元，2017年上半年便已实现净利润超过10亿元人民币。资料显示，比特大陆成功开发并量产了多款ASIC定制芯片和整机系统，拥有先进工艺28nm、16nm、12nm的集成电路全定制设计的量产经验，其中最具代表性的是其运用在加密数字货币矿机中的BM芯片系列。每年比特大陆的矿机销量在数十万台以上，每台矿机要用上百颗ASIC芯片，例如其一台蚂蚁矿机S9就要使用189个ASIC芯片。</p><p>去年该公司推出的SOPHON TPU芯片BM1680也是比特大陆进军人工智能的第一款专用定制芯片。更有消息指出比特大陆近期考虑导入台积电最先进的7纳米制程，以提升挖矿芯片的性能。</p><p>设计服务供应商例如创意可说是此波虚拟货币带动ASIC需求的大赢家，去年相关业务营收贡献约较前年成长三至四倍。比特币带来的ASIC商机，也成为众多IC设计厂争抢的标的。世芯便表示，正与多家国际比特币专业挖矿机生产厂接洽订单当中，若一切顺利，有机会在今年第2季开始贡献营收。</p><p>晶圆代工环节，仅仅台积电一家就从中赚得盆满钵满。根据台积电最新的季度财报显示，加密货币采矿相关业务每季度收入在3.75亿美元左右，占集团销售额的5.1％。然而，随着加密货币的价格不断升值，这个业务板块很可能正在快速增长，今年第一季度将增长至约10%。持续的挖矿热潮带来的HPC需求预计将拉动2018年台积电营收，成为了台积电在iPhone X减单影响下的及时雨。</p><p>台积电依赖于其先进工艺制程，受到世界排名前三的虚拟货币矿机厂家的青睐，除了第一名的比特大陆，嘉楠耘智的阿瓦隆、亿邦科技的翼比特也使其受惠。分析师估计，全球九成ASIC芯片都由台积电生产。</p><p>可以说挖矿对台积电带来的贡献，不亚于一支新的iPhone手机，使台积电成为全球晶圆代工厂商的最大赢家。三星在近日也爆出早已与中国一家比特币挖矿硬件公司签约，开始生产比特币挖矿芯片，成为三星最新获利来源，再次与台积电正面交锋。国外媒体指出，三星已经在去年完成挖矿特殊ASIC芯片的研发工作，更已与俄罗斯比特币挖矿业者Baikal签约，供应14纳米ASIC芯片，样品已经完成测试，预定今年1月量产。</p><p>不过比特币挖矿机的ASIC随电力等成本不断提升，对矿机要求越来越高，不少客户已打算从原本采用台积电12纳米先进制程，再推升至7纳米。目前台积电7纳米制程技术大幅领先三星，以此推估，未来三星能分到的订单，数量应该不大。</p><p>封测环节，此前集微网文章已经披露，集微网从供应链得到的消息显示，今年大陆封测业从比特大陆一家公司中就能获益30亿元人民币左右。目前为比特大陆芯片做封测的企业囊括了日月光、长电、通富微电和华天，采用Flip-Chip工艺封装。其中通富微电和华天每天的量在1kk左右，日月光和长电稍多，每天的封测量总计高达5kk。基板方面，比特大陆主要的基板供应商为珠海越亚，每月在150kk左右，台湾恒劲每月在40kk左右。而这个产能还远远不能满足比特大陆的需求。</p><p>台湾力成在近日的发布会上也披露，已经有客户主动找上门，目前有2个挖矿机的客户，为其贡献了4~5亿元新台币的营收。除上述四家主力封测厂之外，矽品和安靠也参与其中，算上力成，全球前七大封测厂都在分享比特币挖矿的盛宴。</p><p>封测机台方面，野村控股分析师和田木哲哉此前在一份报告中写道，日本的半导体制造设备生产商Ulvac Inc.和爱德万测试等公司也可能从比特币上涨中获利。集微网获悉，爱德万占据了主要市场，台湾公司、天水用的则是成本较低的Chroma（台湾致茂电子）。相较而言，爱德万的机台比较贵，chroma虽然便宜，可惜应用范围太窄，所以封测厂不敢大规模投入购买。</p><p>可以说封测厂方面对比特大陆疯狂的订单充满了兴奋与纠结。订单很猛当然是好事，不过要购买太多测试机台又担心这种风潮能否持续，一旦遭遇断崖式下滑，封测企业也难以承受。</p><p>大陆挖矿芯片带动了全球半导体整个产业链的参与，到目前来看比特币挖矿依旧火爆，进入较早的一批早已赚得盆满钵满，不过半导体产业链还有很多机会，关键是能否抓住。比特币是不是骗局过几年就会有结果，现在半导体供应链一方面窃喜挣钱，一方面又担惊害怕，”甜蜜的烦恼”可以说是他们的真实写照。（校对/范蓉）</p><p><strong>原文链接<a href="http://laoyaoba.com/ss6/html/48/n-661748.html" target="_blank" rel="noopener">http://laoyaoba.com/ss6/html/48/n-661748.html</a></strong></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;集微网消息，今日在联发科2017年第四季度财报法人说明会上，投资者提问透露出一个信息：台积电12nm产能已经被比特大陆占满了。虽然包括中国在内的多个国家和地区已经计划对比特币在内的数字加密货币进行打击，但比特币挖矿热潮仍然持续不退，半导体产业链仅从比特大陆一家就受益良多。
+    
+    </summary>
+    
+      <category term="物联网·大数据" scheme="http://www.bd7iwd.com/categories/%E7%89%A9%E8%81%94%E7%BD%91%C2%B7%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+    
+      <category term="区块链" scheme="http://www.bd7iwd.com/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+      <category term="台积电" scheme="http://www.bd7iwd.com/tags/%E5%8F%B0%E7%A7%AF%E7%94%B5/"/>
+    
+      <category term="比特大陆" scheme="http://www.bd7iwd.com/tags/%E6%AF%94%E7%89%B9%E5%A4%A7%E9%99%86/"/>
+    
+      <category term="IC" scheme="http://www.bd7iwd.com/tags/IC/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MMDVM热点板DMR模式简版配置过程</title>
+    <link href="http://www.bd7iwd.com/posts/c315326b/"/>
+    <id>http://www.bd7iwd.com/posts/c315326b/</id>
+    <published>2017-11-04T14:28:05.000Z</published>
+    <updated>2018-02-01T09:27:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>Hi,everyone。这里是BD7IWD，DMR_ID：4607124   </p><p>欢迎大家来<code>TG：66512</code>通联</p></blockquote><blockquote><p>本文所描述的配置过程仅仅是我本人配置过程的记录，因为我没有其他模式的设备，所以本文只针对<code>DMR模式</code>的设置有效，但无法保证按照本文一步步照着设置就可以百分百让你的设备投入正常使用。如有差异，欢迎留言交流。</p></blockquote><h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><table><thead><tr><th style="text-align:center">序号</th><th style="text-align:center">设备或材料</th><th style="text-align:center">数量</th><th style="text-align:center">备注</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td style="text-align:center">电脑</td><td style="text-align:center">1台</td><td style="text-align:center">本人的是MAC，如果是PC则后面部分内容会有所差异</td></tr><tr><td style="text-align:center">2</td><td style="text-align:center">树莓派</td><td style="text-align:center">1台</td><td style="text-align:center"></td></tr><tr><td style="text-align:center">3</td><td style="text-align:center">TF卡</td><td style="text-align:center">1张</td><td style="text-align:center">最小4G</td></tr><tr><td style="text-align:center">4</td><td style="text-align:center">读卡器</td><td style="text-align:center">1个</td><td style="text-align:center"></td></tr><tr><td style="text-align:center">5</td><td style="text-align:center">Pi-star镜像</td><td style="text-align:center">1套</td><td style="text-align:center">下载地址见下文</td></tr></tbody></table><h1 id="烧卡并启动树莓派"><a href="#烧卡并启动树莓派" class="headerlink" title="烧卡并启动树莓派"></a>烧卡并启动树莓派</h1><blockquote><p>若你的电脑是Windows请自行搜索<code>Win32DiskImager</code>烧录树莓派镜像的教程，他会比MAC电脑简单非常多。因为我无法下载安装此软件，在此不多做介绍。</p></blockquote><p>Pi-star镜像下载地址：<a href="http://www.pistar.uk/downloads/Pi-Star_RPi_V3.4.6_03-Nov-2017.zip" target="_blank" rel="noopener">http://www.pistar.uk/downloads/Pi-Star_RPi_V3.4.6_03-Nov-2017.zip</a></p><p>下载并解压此镜像，然后将带有TF卡的读卡器插入电脑。<br><a id="more"></a></p><h2 id="查看读卡器磁盘信息"><a href="#查看读卡器磁盘信息" class="headerlink" title="查看读卡器磁盘信息"></a>查看读卡器磁盘信息</h2><p>执行如下命令：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df -lh</span><br></pre></td></tr></table></figure><p><img src="http://ackk.qiniudn.com/15098070757937.jpg" alt=""><br>发现我的TF卡盘符为：<code>/dev/disk2s1</code>。</p><h2 id="卸载磁盘"><a href="#卸载磁盘" class="headerlink" title="卸载磁盘"></a>卸载磁盘</h2><p>接下来卸载磁盘，执行：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo diskutil umount /dev/disk2s1</span><br></pre></td></tr></table></figure><p><img src="http://ackk.qiniudn.com/15098072021498.jpg" alt=""></p><p>会让你输入系统密码，输入时无星号，直接输就输了。输完回车即可看见提示<code>disk2s1</code>卸载成功。</p><h2 id="烧录镜像"><a href="#烧录镜像" class="headerlink" title="烧录镜像"></a>烧录镜像</h2><p>接下来开始烧录镜像文件，首先你要确定并记住你的镜像文件在哪里。然后执行如下命令：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo dd bs=1m if=镜像文件绝对路径 of=TF卡的挂载路径 conv=sync</span><br></pre></td></tr></table></figure><p>例如我的路径（请勿直接复制）：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo dd bs=1m if=/Users/bd7iwd/Downloads/Pi-Star/Pi-Star_RPi_V3.4.6_03-Nov-2017.img of=/dev/rdisk2 conv=sync</span><br></pre></td></tr></table></figure><p>如果你在写入的时候出现失败的提示，请将<code>of</code>后面的<code>rdisk</code>改成<code>disk</code>。带<code>R</code>有点类似直接写入TF卡的意思，不带<code>R</code>则有点类似非直接写入，带<code>R</code>会快一点。具体差异自行查找资料。</p><p><img src="http://ackk.qiniudn.com/15098078782697.jpg" alt=""></p><h2 id="完成后的初始化配置"><a href="#完成后的初始化配置" class="headerlink" title="完成后的初始化配置"></a>完成后的初始化配置</h2><p>见到这个提示则说明烧录完成。如果你用的是<code>PI-0-W</code>，则需要去一下地址生产一个配置文件，Linux高手就不多介绍了，自己写一个即可。</p><p>WIFI配置文件生成地址：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://bg3mdo.ts-ham.com/%E6%B4%BE%E4%B9%8B%E6%98%9F%E6%97%A0%E7%BA%BF%E7%94%9F%E6%88%90/</span><br></pre></td></tr></table></figure><p>生成后将文件放到TF卡里面去，此时你的TF卡在电脑上应该叫<code>boot</code>。<br><img src="http://ackk.qiniudn.com/15098085772590.jpg" alt=""><br>若不是<code>PI-0-W</code>，那你就直接插网线或想其他办法让他联网即可。<br>将TF卡跟<code>MMDVM</code>热点板都插好并给树莓派上电。<br><img src="http://ackk.qiniudn.com/15098084497922.jpg" alt=""></p><h1 id="开机配置"><a href="#开机配置" class="headerlink" title="开机配置"></a>开机配置</h1><p>打开路由，找到Pi的IP地址，并在浏览器输入这个IP。<br><img src="http://ackk.qiniudn.com/15098089186245.jpg" alt=""><br>首次登陆会让你验证身份，认证信息如下：<br><code>用户名：pi-star</code><br><code>密码：raspberry</code><br>然后照着下图填写即可<br><img src="http://ackk.qiniudn.com/15098095514871.jpg" alt=""></p><p>点击应用后，界面自动刷新，并出现如下界面，接着配置<br><img src="http://ackk.qiniudn.com/15098098997348.jpg" alt=""></p><h2 id="开始通联准备"><a href="#开始通联准备" class="headerlink" title="开始通联准备"></a>开始通联准备</h2><p>至此，最基本的配置已经完成，在你的DMR设备写频的时候注意，收发频率都是你刚才设置的<code>热点板本地发射频率</code>，<code>时序1</code>，<code>发射联系人</code>自己写，我只有TD370，别的设备没见过，不知道怎么弄的。我常用的发射联系人见下表：</p><table><thead><tr><th style="text-align:center">序号</th><th style="text-align:center">TG</th><th style="text-align:center">备注</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td style="text-align:center">66512</td><td style="text-align:center">我自己创建的通话组</td></tr><tr><td style="text-align:center">2</td><td style="text-align:center">460</td><td style="text-align:center">不知道是啥，反正是中文通联的组</td></tr><tr><td style="text-align:center">3</td><td style="text-align:center">46001</td><td style="text-align:center">一个很热闹的中国通话组</td></tr><tr><td style="text-align:center">4</td><td style="text-align:center">46007</td><td style="text-align:center">一个7区的组</td></tr></tbody></table><p>这里区分两个概念：<code>通话组</code>跟<code>服务器</code>，通俗的讲<code>通话组</code>有点类似微信群或者QQ群，你在组里说句话，谁能听见，就取决于这个所谓的<code>组</code>的概念。<code>服务器</code>就是刚才设置的4501那个东西，这是一个网络信息转发服务器，那么多的服务器不管选哪个都能进入那个组说话，且这几个服务器数据是同步的。服务器的不同，因网络原因会导致通话质量的不同。如同某些地方移动信号好，联通信号差那样。不管你用联通还是移动，只要你进入了那个微信群，你都能在那个群里说话，只不过可能因为信号原因，导致收发信息快慢的问题。</p><p><img src="http://ackk.qiniudn.com/15098107735469.jpg" alt=""></p><p>配置完之后，你就可以欢快的CQ了。进入刚才配置界面的仪表盘里面，你可以看得见呼叫信息。</p><blockquote><p>这个Pi-star还有很多高级设置，我也没研究透，本文就是我首次配置的笔记而已，并非正式教程。欢迎留言交流。</p><p>我常守TG：66512，呼号BD7IWD。欢迎通联</p></blockquote><p>欢迎大家来<code>TG：66512</code>通联</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;Hi,everyone。这里是BD7IWD，DMR_ID：4607124   &lt;/p&gt;
+&lt;p&gt;欢迎大家来&lt;code&gt;TG：66512&lt;/code&gt;通联&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;本文所描述的配置过程仅仅是我本人配置过程的记录，因为我没有其他模式的设备，所以本文只针对&lt;code&gt;DMR模式&lt;/code&gt;的设置有效，但无法保证按照本文一步步照着设置就可以百分百让你的设备投入正常使用。如有差异，欢迎留言交流。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&quot;准备工作&quot;&gt;&lt;a href=&quot;#准备工作&quot; class=&quot;headerlink&quot; title=&quot;准备工作&quot;&gt;&lt;/a&gt;准备工作&lt;/h1&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&quot;text-align:center&quot;&gt;序号&lt;/th&gt;
+&lt;th style=&quot;text-align:center&quot;&gt;设备或材料&lt;/th&gt;
+&lt;th style=&quot;text-align:center&quot;&gt;数量&lt;/th&gt;
+&lt;th style=&quot;text-align:center&quot;&gt;备注&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;1&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;电脑&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;1台&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;本人的是MAC，如果是PC则后面部分内容会有所差异&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;2&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;树莓派&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;1台&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;3&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;TF卡&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;1张&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;最小4G&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;4&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;读卡器&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;1个&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;5&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;Pi-star镜像&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;1套&lt;/td&gt;
+&lt;td style=&quot;text-align:center&quot;&gt;下载地址见下文&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h1 id=&quot;烧卡并启动树莓派&quot;&gt;&lt;a href=&quot;#烧卡并启动树莓派&quot; class=&quot;headerlink&quot; title=&quot;烧卡并启动树莓派&quot;&gt;&lt;/a&gt;烧卡并启动树莓派&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;若你的电脑是Windows请自行搜索&lt;code&gt;Win32DiskImager&lt;/code&gt;烧录树莓派镜像的教程，他会比MAC电脑简单非常多。因为我无法下载安装此软件，在此不多做介绍。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Pi-star镜像下载地址：&lt;a href=&quot;http://www.pistar.uk/downloads/Pi-Star_RPi_V3.4.6_03-Nov-2017.zip&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://www.pistar.uk/downloads/Pi-Star_RPi_V3.4.6_03-Nov-2017.zip&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;下载并解压此镜像，然后将带有TF卡的读卡器插入电脑。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="HAM·业余无线电" scheme="http://www.bd7iwd.com/categories/HAM%C2%B7%E4%B8%9A%E4%BD%99%E6%97%A0%E7%BA%BF%E7%94%B5/"/>
+    
+    
+      <category term="HAM" scheme="http://www.bd7iwd.com/tags/HAM/"/>
+    
+      <category term="无线电" scheme="http://www.bd7iwd.com/tags/%E6%97%A0%E7%BA%BF%E7%94%B5/"/>
+    
+      <category term="DMR" scheme="http://www.bd7iwd.com/tags/DMR/"/>
+    
+      <category term="树莓派" scheme="http://www.bd7iwd.com/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/"/>
+    
+      <category term="MMDVM" scheme="http://www.bd7iwd.com/tags/MMDVM/"/>
+    
+      <category term="BD7IWD" scheme="http://www.bd7iwd.com/tags/BD7IWD/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>致青春</title>
+    <link href="http://www.bd7iwd.com/posts/57fcab8e/"/>
+    <id>http://www.bd7iwd.com/posts/57fcab8e/</id>
+    <published>2017-07-04T10:58:21.000Z</published>
+    <updated>2018-02-01T09:27:46.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>本文成文于几年前大学期间，今天翻移动硬盘偶然发现这个东西，觉得也适合现在于是就发出了当做留存吧</p></blockquote><p>你好，再见？多少人经历过这样措手不及的对白？匆匆的挥一挥手，忘了是召唤还是作别。你好，青春，再见，青春。<br>今天，也让我们再次经历这样唐突的时光好么？就像多年之前，我们身上还是只有校徽的校服，脚上还是一双球鞋，心中还有好多碎碎的梦想。厕所门口躺着的烟头，桌脚中藏着的情书，或是满满摞起来的书本，还有远方的天空。就这样不轻不重的在岁月的长河中或是磅礴或是安静的消磨了我们的青春。受《致青春》这部电影的影响，8090的人群开始掀起了探讨青春的狂潮。<a id="more"></a><br>80后，一个时代的隔间，大部分人已成家立业，青春对于这一群人，就像是刚刚擦肩而过的心上人，想追，力不从心，想走，缠绵悱恻。90后作为新生代的群体，大多时而迷茫时而明朗，半睡半醒之间，如同当头一棒的发现的青春已所剩无几。或是怀念，或是感伤，或许还有人会盼望，最终，都成了对岁月的苦恼。人民日报评论《致青春》时说，“好像所有人都在寻找青春，在这个功名利禄，房价工资无事不牵绊住手脚的岁月里，不放谈谈青春吧。那是人生的玫瑰，随注定凋零，却用生命怒放。也是每人必走的一条弯路，乱石磊磊，满吐芬芳。其实青春与年龄无关，别中让生活充满感伤。有时，只要勇敢一次，便有青春不腐。”<br>有一次我和朋友在校园里散步，聊到大学，聊到未来，最后聊到父母。也许有的朋友会奇怪，为何在谈起青春之时，会聊到上一代人？我想，这是佛家中经常提起的因果观念影响了我。青春，是生命逃不掉的一部分，生命给予我们青春，就如同父母给予我们生命。朋友说，我其实很想知道，我们爸妈和我们差不多大的时候在干什么？他们是不是也会同我们一样？我笑着问朋友，像我们一样？我们怎么了？朋友抽了口烟，淡淡的说，我觉得我们好累？是么？我和朋友最后的结论是，我们的父母和我们并不一样，他们那一代人，经历了时代的巨变，在混乱中成长，在闭塞向开放的转变过程中，他们的青春正好被磨得粉碎，或许有人钟情过琼瑶行于纸上的浪漫，或许有人憧憬过远方灯火霓虹的世界，可是他们也仅限于幻想。他们住在自己的城里，他们的头顶有一轮属于他们的明月，虽然不那么疯狂，但也算是云淡风轻的有个方向。不知道他们是否同我们一样经历过看似隐忍坚强的青春期叛逆，他们也许并没有什么轰轰烈烈的举动，其实我们大多数人也没有。而今，我们看到的是他们稳健中略带沧桑的忍受我们略带嚣张的斗争。一首老歌，《听妈妈讲过去的事》，简单的旋律响起的时候，你是否想像到我们已经苍老的父母亲，站在属于他们的月光之下，和我们此时此刻一样，淡淡的回忆属于他们的青春？那个时候，他们也有自己爱过的千万，也有恨过的种种，但现在一切归于平静，成了我们最亲爱的人……<br>提起青春，有一群人是永远逃不掉的祭奠对象。他们好像是朋友，一起吃饭，一起娱乐，一起疯狂，一起玩笑的定了终生，一起不经意间许了一辈子。他们有像是恋人，靠过他的肩膀，占过他的怀抱，听过他的誓言，不知不觉以为这样会很远很远。青春，总有一个两个这样的人出现，是朋友，是爱人，自己都分不清。我想，这不是书上说的“知己”和“闺蜜”所能概括的感情，以至于我自己，想说也说不清。想起一句老套到乏味的话，多少人以友情的名义爱着一个人，多少人以友情的名义拒绝了一个人？多少人不敢说出来，怕说出来连朋友都不再是了，多么害怕一颗期待的心换来他的转身而过？这种感情，别人说再多也是白费，我想，你自己可以知道吧？就如同那些时候，你们在某个地方，恰巧有暖暖的阳光洒在他的脸上，映着他淡淡的微笑。好妹妹，两个温暖的男子，陪你一起回忆《那时的阳光》，希望你想起你的那个他，还记得那暖暖的阳光。<br>很早前，我在自己的书上写到，青春是一场暴走的欲望。所以这一路走来，即便是充满了无数悲情的故事，但是我们却依旧习惯了一种外显或者内藏的暴躁以及富有激情的冲动，这一切足以让青春显得生机勃勃。我们有兄弟一起吃吃喝喝疯疯闹闹，我们有哥们一起嘻嘻哈哈走走逛逛，我们就这样固执，天真的坚守着属于我们那个年龄，那个自己的小小幸福。对幸福的向往是青春最热衷的舞台剧，我们看似精明的扮演各种角色，看似明智的思考未来，看似疯狂的追求幸福。那种纵横在青春中的渴求，或多或少的增添点儿对理想的追逐，对未来的规划，甚至是对世界的关怀，这样加足料的青春才狂野的更加浓烈。现在我们大概是长大了，接触了象牙塔之外的真实世界，当年那些热衷的话题，现在想起来略显无知和无聊。可我们也就是在这种焦躁无聊的思考中让青春浓烈了一季，而后，我们不得不无奈的问一句《能不能幸福》。其实，问你幸福不幸福就如同问你内裤合适不合适，他藏在你最温暖的地方，你可以感受但你不会轻易吐露。青春过去了，便真的过去了，那时候的幸福与困苦都成了回忆，所以可以怀念幸福，但不可沉迷痛苦。<br>张小娴说，在茫茫人海中，总有那么一个人，使你不得不把你所有的专注力放在他身上，使他有别于芸芸众生。我觉得张小娴短短的一句话道出了青春路上过来人的情愫，不同的是，幸运的人拥有了这个芸芸众生中的与众不同。不幸的人错失了这个茫茫人海中的情有独钟。《青春诗》中这样写到，如果不爱上一个人，那就不曾拥有青春。爱情到底是什么？就算再过一次青春，我想我还是不能明白。有人说真的爱上一个人可能不会那么孤独。爱的真切了，爱的那个人就是自己的全世界，有他在，自己就是完整的。一切有关他的，有关我们爱的都是大事；一切无关他的都是小事。这疯狂的幼稚即使在青春那样充满了幻想的年代也终有梦醒的时候，爱的高潮一过，从深处滑落的时候，便是此生最孤独的时刻，即使青春让你带走了他留给你的最真的爱，和最美的回忆。直到后来，有人甚至会感慨，那段青春，没人陪我度过，但我却认真爱过。也许你也体会过，点了一根一根的烟，喝了一瓶又一瓶的酒，胃里翻江倒海，心里千疮百孔，痛着痛着，爱情就不再那么沉重，爱情也成了小事，而他成了路人，青春成了回忆。青春之后，悠长的岁月里，或相爱，或相知，或厮守，都不如青春之际那个人留下的微妙。<br>青春不是最后的终点站，即便是被青春重伤的人也不能放弃对生命的追逐。我想，对于过去的怀念不得不让人伤感，但也必然让人重获新的希望。青春其实不仅仅只有爱情，现在回忆起来，那里就像一个围城，有唠叨的父母，有傻傻的死党，有可恨的二逼，还有那样美好的爱人，以及那个充满了叛逆和疯狂的自己，只是他们走不出，我们进不去，就这样愣愣的让他们成为回忆。青春？真的没有了么？我想并不是，青春是一次成长，在似是而非的欲望中学会选择，在芸芸众生中从冲动到宁静，只要还在成长，就该是青春当时。我们不能黯然神伤，哪怕我们正在苟且偷生。听一首《热恋吧姑娘》，让我们重新捡起丢在昨天的那份对生活的憧憬，对爱情的疯狂，哪怕是一点点，也算作青春从未苍老的证据。不要悲伤，不要迷茫，像热恋一般的重新体验每一分每一秒。<br>天遥地远，万水千山，时光总在不经意间流失。白驹过隙踏碎太多的记忆，青春就这样来了又去，当我们低头的一瞬间，才发现脚下长长的路从这头到那头，还有好远好远。青春，到底教会了我们什么？我想每个人的体会都不同，只是我们经历的主题都差不多，似是而非的疯狂，若有若无的平淡，爱情，友情，女人，兄弟，啤酒，吉他?一切都成了独属于我们的财富，就如同山顶盛开的花，虽会凋谢，但开的时候却那样傲然挺立。每次听到许巍的《蓝莲花》，都会有一种站在阳台大喊的冲动，或为自由，或为理想，或为自己。最后我想分享一段朋友发过来的文字，在我看来，青春很简单，就觉青春是一种美好的经历吧，没有过多勾心斗角，虽然过去了，但留下的一定是我们这辈子最美的回忆，那些友谊也伴随我们一生吧，还有就是对父母的逆反心理，只有经历了，才会更懂得孝的真谛。感谢你陪我一起为青春致敬，我们多想青春永不永不苍老……</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;本文成文于几年前大学期间，今天翻移动硬盘偶然发现这个东西，觉得也适合现在于是就发出了当做留存吧&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;你好，再见？多少人经历过这样措手不及的对白？匆匆的挥一挥手，忘了是召唤还是作别。你好，青春，再见，青春。&lt;br&gt;今天，也让我们再次经历这样唐突的时光好么？就像多年之前，我们身上还是只有校徽的校服，脚上还是一双球鞋，心中还有好多碎碎的梦想。厕所门口躺着的烟头，桌脚中藏着的情书，或是满满摞起来的书本，还有远方的天空。就这样不轻不重的在岁月的长河中或是磅礴或是安静的消磨了我们的青春。受《致青春》这部电影的影响，8090的人群开始掀起了探讨青春的狂潮。
+    
+    </summary>
+    
+      <category term="文学·读书" scheme="http://www.bd7iwd.com/categories/%E6%96%87%E5%AD%A6%C2%B7%E8%AF%BB%E4%B9%A6/"/>
+    
+    
+      <category term="青春" scheme="http://www.bd7iwd.com/tags/%E9%9D%92%E6%98%A5/"/>
+    
+      <category term="回忆" scheme="http://www.bd7iwd.com/tags/%E5%9B%9E%E5%BF%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>小米对讲机测评</title>
+    <link href="http://www.bd7iwd.com/posts/6ef6e5a0/"/>
+    <id>http://www.bd7iwd.com/posts/6ef6e5a0/</id>
+    <published>2017-03-03T11:03:05.000Z</published>
+    <updated>2018-02-01T09:31:36.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>3月3日0时，小米正式发售小米米家对讲机。BD7IWD有幸于第二天拿到那台正式发售的机器。到手后马上开箱测评。测评详情如下：</p><h1 id="包装"><a href="#包装" class="headerlink" title="包装"></a>包装</h1><p>小米米家对讲机采用的包装方式及其简单，就是大部分手机使用的上下开盖方式，开盖后里面包含<code>机身</code> <code>天线</code> <code>Micro-USB充电线</code> <code>说明书</code>。包装大小约3包烟横向并排大小，厚度略高于烟盒厚度。</p><h2 id="纯外包装"><a href="#纯外包装" class="headerlink" title="纯外包装"></a>纯外包装</h2><p><img src="http://ackk.qiniudn.com/%E7%BA%AF%E5%A4%96%E5%8C%85%E8%A3%85.JPG" alt="纯外包装"><br><a id="more"></a></p><h2 id="外包装底部"><a href="#外包装底部" class="headerlink" title="外包装底部"></a>外包装底部</h2><p><img src="http://ackk.qiniudn.com/%E5%8C%85%E8%A3%85%E5%BA%95%E9%83%A8.JPG" alt="外包装底部"></p><h2 id="外包装大小"><a href="#外包装大小" class="headerlink" title="外包装大小"></a>外包装大小</h2><p><img src="http://ackk.qiniudn.com/%E5%A4%96%E5%8C%85%E8%A3%85%E5%A4%A7%E5%B0%8F.JPG" alt="外包装大小"></p><h2 id="开箱"><a href="#开箱" class="headerlink" title="开箱"></a>开箱</h2><p><img src="http://ackk.qiniudn.com/%E5%BC%80%E7%AE%B1.JPG" alt="开箱"></p><h3 id="机身烟盒对比"><a href="#机身烟盒对比" class="headerlink" title="机身烟盒对比"></a>机身烟盒对比</h3><p><img src="http://ackk.qiniudn.com/%E6%9C%BA%E8%BA%AB%E7%83%9F%E7%9B%92.JPG" alt="机身烟盒对比"></p><h3 id="机身厚度"><a href="#机身厚度" class="headerlink" title="机身厚度"></a>机身厚度</h3><p><img src="http://ackk.qiniudn.com/%E6%9C%BA%E8%BA%AB%E5%8E%9A%E5%BA%A6.JPG" alt="机身厚度"></p><h3 id="PTT特写"><a href="#PTT特写" class="headerlink" title="PTT特写"></a>PTT特写</h3><p><img src="http://ackk.qiniudn.com/PTT%E7%89%B9%E5%86%99.JPG" alt="PTT特写"><br>PTT按键总体感觉还算舒服，按键段落分明。</p><h2 id="待机界面"><a href="#待机界面" class="headerlink" title="待机界面"></a>待机界面</h2><p><img src="http://ackk.qiniudn.com/%E5%BE%85%E6%9C%BA.JPG" alt="待机界面"></p><h2 id="发射界面"><a href="#发射界面" class="headerlink" title="发射界面"></a>发射界面</h2><p><img src="http://ackk.qiniudn.com/%E5%8F%91%E5%B0%84.JPG" alt="发射"></p><h2 id="APP下载"><a href="#APP下载" class="headerlink" title="APP下载"></a>APP下载</h2><p><img src="http://ackk.qiniudn.com/APP%E4%B8%8B%E8%BD%BD%E9%A1%B5.PNG" alt="APP下载"></p><h2 id="亚音"><a href="#亚音" class="headerlink" title="亚音"></a>亚音</h2><p><img src="http://ackk.qiniudn.com/%E6%A8%A1%E6%8B%9F%E5%8E%8B%E9%9F%B3.JPG" alt="亚音"><br><img src="http://ackk.qiniudn.com/%E5%8E%8B%E9%9F%B3%E8%AE%BE%E7%BD%AE.JPG" alt="亚音设置"><br>亚音里面内置<code>模拟亚音</code>跟<code>数字亚音</code>。只需选择即可。都是常用亚音频</p><h2 id="中继设置"><a href="#中继设置" class="headerlink" title="中继设置"></a>中继设置</h2><p><img src="http://ackk.qiniudn.com/%E4%B8%AD%E7%BB%A7%E8%AE%BE%E7%BD%AE.JPG" alt="中继设置"><br>中继设置比较坑的有两点:<br>    1.步进目前是固定在12.5K，且不可调，这就意味着有些中继频率无法设置到正确频点。这点我本人非常无法接收。<br>    2.异频收发不可存储，这就意味着需要在几个中继之间切换的话，每切换一次都需要进行设置。</p><h2 id="定位"><a href="#定位" class="headerlink" title="定位"></a>定位</h2><p><img src="http://ackk.qiniudn.com/GPS%E4%BF%A1%E6%81%AF.JPG" alt="定位功能"><br>定位功能目前测试出来的结果是手机获取地理位置信息，然后将信息经过蓝牙传给对讲机，对讲机将地理信息加载到频率上外发出去。我在测试的时候使用438.500开启位置共享，然后旁边的GP338会收到一串不明音频。猜测原理就是APRS。开启定位后，手机上会在地图上标记一个点，就是常用导航软件里面那种，如果在对讲机上面查看位置信息则不会显示图片，而是将GPS坐标信息以文本的形式显示出来。因为目前使用的人不多，我没有在手机上搜到附近的人。</p><h1 id="其他设置"><a href="#其他设置" class="headerlink" title="其他设置"></a>其他设置</h1><h2 id="快速组队"><a href="#快速组队" class="headerlink" title="快速组队"></a>快速组队</h2><p>因为周边没有使用小米对讲机的人，没有组队成功，发起组队的时候对讲机屏幕会提示<code>组队信息发送中</code>，我在438.500上发送组队信息，但是旁边的GP338没有收到任何声音，我猜测他的组队方式是通过蓝牙信号进行组队，然后将发起者的频率信息通过蓝牙发送给成员对讲机，成员对讲机接收到之后自动设置频率为发起者的频率。</p><h2 id="手机设置频率"><a href="#手机设置频率" class="headerlink" title="手机设置频率"></a>手机设置频率</h2><p><img src="http://ackk.qiniudn.com/IMG_0446.PNG" alt=""><br><img src="http://ackk.qiniudn.com/IMG_0447.PNG" alt=""><br>目前问题还是那样，无论在设备上设置还是手机上面设置，步进固定为12.5K</p><p>测评至此，还有任何疑问欢迎留言给我，我看见留言里面我没测的再测一遍。争取解答一些HAM的问题。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;3月3日0时，小米正式发售小米米家对讲机。BD7IWD有幸于第二天拿到那台正式发售的机器。到手后马上开箱测评。测评详情如下：&lt;/p&gt;
+&lt;h1 id=&quot;包装&quot;&gt;&lt;a href=&quot;#包装&quot; class=&quot;headerlink&quot; title=&quot;包装&quot;&gt;&lt;/a&gt;包装&lt;/h1&gt;&lt;p&gt;小米米家对讲机采用的包装方式及其简单，就是大部分手机使用的上下开盖方式，开盖后里面包含&lt;code&gt;机身&lt;/code&gt; &lt;code&gt;天线&lt;/code&gt; &lt;code&gt;Micro-USB充电线&lt;/code&gt; &lt;code&gt;说明书&lt;/code&gt;。包装大小约3包烟横向并排大小，厚度略高于烟盒厚度。&lt;/p&gt;
+&lt;h2 id=&quot;纯外包装&quot;&gt;&lt;a href=&quot;#纯外包装&quot; class=&quot;headerlink&quot; title=&quot;纯外包装&quot;&gt;&lt;/a&gt;纯外包装&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;http://ackk.qiniudn.com/%E7%BA%AF%E5%A4%96%E5%8C%85%E8%A3%85.JPG&quot; alt=&quot;纯外包装&quot;&gt;&lt;br&gt;
+    
+    </summary>
+    
+      <category term="HAM·业余无线电" scheme="http://www.bd7iwd.com/categories/HAM%C2%B7%E4%B8%9A%E4%BD%99%E6%97%A0%E7%BA%BF%E7%94%B5/"/>
+    
+    
+      <category term="HAM" scheme="http://www.bd7iwd.com/tags/HAM/"/>
+    
+      <category term="BD7IWD" scheme="http://www.bd7iwd.com/tags/BD7IWD/"/>
+    
+      <category term="小米" scheme="http://www.bd7iwd.com/tags/%E5%B0%8F%E7%B1%B3/"/>
+    
+      <category term="对讲机" scheme="http://www.bd7iwd.com/tags/%E5%AF%B9%E8%AE%B2%E6%9C%BA/"/>
+    
+      <category term="测评" scheme="http://www.bd7iwd.com/tags/%E6%B5%8B%E8%AF%84/"/>
+    
+      <category term="开箱" scheme="http://www.bd7iwd.com/tags/%E5%BC%80%E7%AE%B1/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>区块链在物联网上面的应用构想</title>
+    <link href="http://www.bd7iwd.com/posts/2fb18860/"/>
+    <id>http://www.bd7iwd.com/posts/2fb18860/</id>
+    <published>2016-12-26T17:33:44.000Z</published>
+    <updated>2018-02-01T09:31:36.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>区块链技术不仅将深刻地影响和改变金融行业，在物联网领域也将起到革命性的作用。物联网（Internet of Things，简称IoT）是一种通过网络技术将传感器、控制器和机器设备等连接起来。通过物物相连实现机器设备智能化管理和控制的目的。互联网技术将全世界的计算机连接在一起，实现了人与人之间的远程信息交流，促进了人类文明的巨大进步。而物联网技术将现实世界中的各种设备连接在一起，必然会帮助人类迈向更加智能和便捷的未来社会。</p><p>随着技术的不断进步，物联网技术的发展和应用在最近几年取得了显著的成果，目前在世界范围内已经有数十亿个传感器和智能控制器投入使用，预计在未来几年这个数字还会成倍的增长。但是，物联网技术也面临着许多问题和挑战，这些问题有可能成为物联网在未来发展和应用的巨大障碍，而区块链技术给这些问题的解决提供可能性。<a id="more"></a></p><h1 id="1、降低物联网的运营成本"><a href="#1、降低物联网的运营成本" class="headerlink" title="1、降低物联网的运营成本"></a>1、降低物联网的运营成本</h1><p>随着物联网技术的进一步应用，数以千亿计的物联网设备的管理和维护将会给生产商、运营商和最终用户带来巨大的成本压力。目前的物联网应用基本上都是采用中心化的体系结构，也就是所有的数据流都汇总到单一的中心控制系统，虽然随着云计算技术的普及和利用，现在物联网运营商可以通过云端的服务器集群提供物联网智能设备产生的数据的存储和交换服务。但是随着连接设备数量的几何级增长，中心化服务需要付出的计算、存储和带宽成本也会增加大无法负担的程度。</p><p>区块链技术为物联网提供了点对点直接互联的方式进行数据传输，整个物联网解决方案不需要引入大型数据中心进行数据同步和管理控制，包括数据采集、指令发送和软件更新等操作都可以通过区块链的网络进行传输。区块链技术解决物联网的构架瓶颈问题主要体现在三个方面：</p><blockquote><ol><li>点对点的分布式数据传输和存储的构架；     </li><li>分布式环境下数据的加密保护和验证机制。     </li><li>方便可靠的费用结算和支付。</li></ol></blockquote><p>虽然现在已经有不少成功的物联网应用，但是现有技术无法真正提供万物互联的能力。目前的物联网构架基本上都是封闭式的，虽然一个系统中的设备之间可以形成互联，并且也利用了互联网传输数据，但是基本的构架并不是开放式的，也就是说不同应用系统的设备很难实现有价值的互联互通。虽然目前也有公司提供了基于API的物联网服务访问方式，但还是通过一个集中服务器的间接访问方式，并没有在设备之间直接通信。</p><p>造成这种现象的根本原因并非物联网设备在技术上无法互联，而是在不同信任域下物联网节点的互通性受到安全问题的束缚。因为一旦某个物联网传感节点的数据经过其他服务商或者个人的智能节点进行数据传输，数据本身就有可能被非法篡改或者丢失，造成系统可靠性的下降。通过区块链的数据加密技术和P2P互联网络，这个信任问题就可以迎刃而解。</p><p>另外一个方面，需要利用其它物联网运营商或者个人的设备和网络进行数据的传输和存储，必须在利益分配上在多方达成一致。也就是说，提供基础设备和网络服务的公司和个人可以便捷地获得可靠的收益，比如按照存储和传输的数据量进行收费。在目前的技术条件下，如果属于不同的物联网服务提供商需要实现资源共享，必须达成一个合作的协议，并且在顶层设计好双方结算的系统。在万物互联的大环境下，这种两两互联的方式所需要的管理和实施成本非常巨大，以至于很难实现。</p><p>通过使用区块链技术，不同所有者的物联网设备可以直接通过加密协议传输数据，并且可以把数据传输按照交易进行计费结算。这就需要在物联网区块链中设计一种加密数字货币作为交易结算的基础单位，所有的物联网设备提供商只要在出厂之前给设备加入区块链的支持，就可以在全网范围内在各个不同的运营商之间进行直接的货币结算。</p><h1 id="2、解决物联网的隐私保护问题"><a href="#2、解决物联网的隐私保护问题" class="headerlink" title="2、解决物联网的隐私保护问题"></a>2、解决物联网的隐私保护问题</h1><p>随着物联网产业的不断发展，对于数据安全和隐私保护的问题越来越受到关注。在斯诺登事件之后，由政府和大型企业控制的网络服务的隐私被广泛质疑。特别在物联网领域，目前的中心化服务构架将所有的监测数据和控制信号都由中央服务器存储和转发。这些中央服务器收集者所有的摄像头传输过来的视频信号，麦克风录制的通话记录，甚至用户的奔跑节奏、心跳和血压的信息都汇总到中央服务器，并且通过中央服务器转发的信号还可以控制家庭中门窗、电灯和空调等设备的开启，直接地影响着用户的日常生活。</p><p>虽然物联网运营商一直宣称他们能够有效保护用户的数据安全和隐私，但是一系列的安全漏洞和隐私泄露事件的发生使用户无法真正信任运营服务提供商能够实现他们的承诺。事实上，政府安全部门可以通过未经授权的方式对存储在中央服务器中的数据内容进行审查，而运营商也很有可能出于商业利益的考虑将用户的隐私数据出售给广告公司进行大数据分析，以实现针对用户行为和喜好的个性化推荐，这些行为已经危害到物联网设备使用者的基本权利，从而是很大一部分用户拒绝接受连入网络的智能设备。</p><p>区块链技术为物联网提供了去中心化的可能性，只要数据不是被单一的云服务提供商控制，并且所有传输的数据都经过严格的加密处理，那么用户的数据和隐私将会更加的安全。在大数据分析技术被广泛使用的今天，用户可以自己利用数据的价值而不是被运营商进行劫持和外协。</p><h1 id="3、利用区块链建立新的商业模式"><a href="#3、利用区块链建立新的商业模式" class="headerlink" title="3、利用区块链建立新的商业模式"></a>3、利用区块链建立新的商业模式</h1><p>未来物联网不仅仅是将设备连接在一起完成数据的采集，人们更加希望连入物联网的设备能够具有一定的智能，在给定的规则逻辑下进行自主协作，完成各种具备商业价值的应用。但是，具备商业价值的交互必须确保进行操作的设备具有代表拥有者进行交易的授权，并且这种授权能够被直接验证。同时，由智能设备发出的交易请求需要可靠地记录以确保交易的有效性。</p><p>在当前中心化构架下的物联网很难完成上述自主协作和有效交易，因为这种协作和交易的相关方往往是属于不同的利益主体，具有复杂和难以确定的信任关系。因此，目前的物联网设备的协作和交易只能够在同一信任域下进行，也就是说协作和交易的设备必须是同一个物联网运营服务商提供或者进行授权验证，这就大大降低了物联网应用的真正商业价值。 区块链技术能够提供去信任中介的直接交易， IBM公司和三星公司联合研制的概念验证系统“自主去中心的点对点遥测”（Autonomous Decentralized Peer-to-Peer Telemetry，简称ADEPT），使用了区块链技术构建智能设备的分布式网络，验证了去中心化物联网构架的可行性。ADEPT能够使得连入其中的设备之间能够安全并高效地直接相互通信，并实现复杂的商业逻辑。比如，通过智能合约控制家中的洗衣机在洗衣粉不够的时候直接向供应商下单进行采购，区块链技术使连入ADEPT的智能设备之间直接进行订单确认和完成支付操作。</p><h1 id="4、区块链技术在物联网环境下的演进"><a href="#4、区块链技术在物联网环境下的演进" class="headerlink" title="4、区块链技术在物联网环境下的演进"></a>4、区块链技术在物联网环境下的演进</h1><p>区块链技术的部署和实施需要由多个节点共同参与，在物联网的条件下每个智能设备的计算能力都非常有限，与传统的区块链挖矿节点相比，其Hash计算能力甚至不到GPU系统的千分之一。另外，物联网设备的电力消耗也是在实际应用中受到严格关注的问题。因此，不可能直接把现有的区块链技术原封不动地应用到物联网的应用当中。</p><p>首先需要改造的是区块链的共识验证机制。在物联网的应用环境下，每个传感器和微控制器节点不承担账簿记录的工作，也就是说物联网的智能设备不参与PoW的计算，而只进行数据得加密和传输，并且把数据传输作为交易向整个区块链网络广播。在区块链网络中专门部署验证节点进行PoW的计算，这些验证验证节点可以由多个不同的物联网服务提供商使用主流的PC服务器搭建，起到交易结算的目的。与传统的物联网中心服务器构架相比，这种在少量验证节点的计算资源投入将远小于原先的服务集群的成本。另外一方面，这些验证节点本身并不保存用户的数据，因此也不存在用户数据泄露和被利用的可能性。</p><p>物联网向区块链网络转型的发展速度可能会远远超过目前人们的普遍预期，当物联网真正实现万物互联互通的时候，区块链的价值将得到更大的发挥。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;区块链技术不仅将深刻地影响和改变金融行业，在物联网领域也将起到革命性的作用。物联网（Internet of Things，简称IoT）是一种通过网络技术将传感器、控制器和机器设备等连接起来。通过物物相连实现机器设备智能化管理和控制的目的。互联网技术将全世界的计算机连接在一起，实现了人与人之间的远程信息交流，促进了人类文明的巨大进步。而物联网技术将现实世界中的各种设备连接在一起，必然会帮助人类迈向更加智能和便捷的未来社会。&lt;/p&gt;
+&lt;p&gt;随着技术的不断进步，物联网技术的发展和应用在最近几年取得了显著的成果，目前在世界范围内已经有数十亿个传感器和智能控制器投入使用，预计在未来几年这个数字还会成倍的增长。但是，物联网技术也面临着许多问题和挑战，这些问题有可能成为物联网在未来发展和应用的巨大障碍，而区块链技术给这些问题的解决提供可能性。
+    
+    </summary>
+    
+      <category term="物联网·大数据" scheme="http://www.bd7iwd.com/categories/%E7%89%A9%E8%81%94%E7%BD%91%C2%B7%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+    
+      <category term="区块链" scheme="http://www.bd7iwd.com/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+      <category term="物联网" scheme="http://www.bd7iwd.com/tags/%E7%89%A9%E8%81%94%E7%BD%91/"/>
+    
+      <category term="信息安全" scheme="http://www.bd7iwd.com/tags/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/"/>
+    
+      <category term="去中心化" scheme="http://www.bd7iwd.com/tags/%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>新中国建国后几个逗逼皇帝</title>
+    <link href="http://www.bd7iwd.com/posts/f46c2265/"/>
+    <id>http://www.bd7iwd.com/posts/f46c2265/</id>
+    <published>2016-12-05T09:24:09.000Z</published>
+    <updated>2018-02-01T09:31:36.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>我国历史上最后一位公认的皇帝是宣统帝溥仪。溥仪之后，袁世凯脑子进水了，复辟帝制，当了83天皇帝。结果惹得举国愤怒，招大批愤青炮轰。最后因“帝途不顺”，抑郁而终。</p><p>然而我伟大中华，人才辈出。想要称帝的人竟是屡有所见。以下便列举几个<a id="more"></a></p><h1 id="1、石顶武"><a href="#1、石顶武" class="headerlink" title="1、石顶武"></a>1、石顶武</h1><p>石顶武是湖南湘潭人，出身于大地主家庭。他的爷爷创立了一个叫做“三期普渡”的会道门组织，靠着封建迷信拉拢信徒。最后传到石顶武的手里，“三期普渡”的规模达到了顶峰。随着信徒越来越多，也趁着天下不太平，1947年，石顶武宣布建立“大中华佛国”，自称“皇帝”，并分封了左右丞相。还组建了军队，任命了总司令和副总司令。</p><p>建国后，石顶武越玩越大，居然跟国民党残留在大陆的特务组织联系上了。1953年，正当石顶武准备发动叛乱时，被公安干警抓获。“大中华佛国”暂时挂了。然而30年后，也就是1983年，它又死灰复燃了。这次登基的是石顶武的儿子石金鑫。但很快就被当地公安机关镇压了。“大中华佛国”这次是彻底挂了。</p><h1 id="2、朱仕强"><a href="#2、朱仕强" class="headerlink" title="2、朱仕强"></a>2、朱仕强</h1><p>这个哥们的具体信息不详，只知道是大巴山一带的，“称帝”时间是1980年。这哥们比较悲催，仅仅当了7天“皇帝”后，就被村干部带人给收拾了。算是在位时间最短的”皇帝“。</p><h1 id="3、丁兴来"><a href="#3、丁兴来" class="headerlink" title="3、丁兴来"></a>3、丁兴来</h1><p>丁兴来是个盲人，是会道门组织“道德金门”的首领。1981年，他正式“登基称帝”。“称帝”后的第一件事，就是急不可耐地册封了正宫娘娘、西宫娘娘共四人。由于比较隐蔽，直到1990年，丁兴来才引起当地公安机关的注意，并随即将之剿灭。</p><h1 id="4、张清安"><a href="#4、张清安" class="headerlink" title="4、张清安"></a>4、张清安</h1><p>张清安是大巴山人，1982年正式“称帝”，国号“皇清”。他不但刻好了玉玺，册封了后宫和诸大臣，更好玩的是，他还册封蒋介石为“威国王”，并且一本正经地写好了“谕旨”，加盖了“皇帝”玺印，准备通过邮局寄到台湾去。可惜了，还没来得及寄呢，张清安就被当地公安机关给逮捕了。</p><p>如果张清安的效率高一点，在被抓获之前把分封“威国王”的“谕旨”寄了出去，蒋大哥收到这份谕旨，那会是何等的握草……</p><h1 id="5、曾应龙"><a href="#5、曾应龙" class="headerlink" title="5、曾应龙"></a>5、曾应龙</h1><p>曾应龙是四川广安人，1985年，曾应龙“称帝”，建立了“大有国”。当时，计划生育搞得比较紧，于是，“大有国”的其中一句口号就是“娃儿随便生”。</p><p>曾应龙也算玩得比较猛的，他曾经率领几百个农民臣属围攻县医院，最后俘虏了医院里所有的医生、护士，并销毁了所有的避孕用品。这事儿最后惊动了当地驻军。当然，解放军随便一出马，曾皇帝和他的大臣们就沦陷了，“大有国”灭亡。政府念其愚钝无知，网开一面，曾应龙只被判了个无期。</p><h1 id="6、晁正坤"><a href="#6、晁正坤" class="headerlink" title="6、晁正坤"></a>6、晁正坤</h1><p>晁正坤是山东安丘人，是当地有名的巫婆。她效仿一代女皇武则天，于1986年“称帝”，建立了“大圣王朝”。她学习武则天学得最好的地方是，也建立了自己的“后宫”，而且专找童男。后被当地政府镇压。</p><h1 id="7、李成福"><a href="#7、李成福" class="headerlink" title="7、李成福"></a>7、李成福</h1><p>李成福是河南人，号称自己是唐朝皇族后裔，以重现大唐为己任。1990年，李成福宣布“万顺天国”正式成立，自己是“皇帝”，1990年至1992年期间在河南嵩县、南召县等地，李成福自建安民党、万李起义军，自称唐朝后裔，妄图以农村包围城市的方式复辟唐朝帝制，定都西安。1992年4月，因人口普查被发现，然后被3名公安干警给灭了。后村民立李成福儿子李欲明为帝。李成福的妻子为太后垂帘听政。拥兵八人，立丞相，修皇宫（后因资金不足改为瓦房）然后也村里面干警给灭了。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;我国历史上最后一位公认的皇帝是宣统帝溥仪。溥仪之后，袁世凯脑子进水了，复辟帝制，当了83天皇帝。结果惹得举国愤怒，招大批愤青炮轰。最后因“帝途不顺”，抑郁而终。&lt;/p&gt;
+&lt;p&gt;然而我伟大中华，人才辈出。想要称帝的人竟是屡有所见。以下便列举几个
+    
+    </summary>
+    
+      <category term="文学·读书" scheme="http://www.bd7iwd.com/categories/%E6%96%87%E5%AD%A6%C2%B7%E8%AF%BB%E4%B9%A6/"/>
+    
+    
+      <category term="历史" scheme="http://www.bd7iwd.com/tags/%E5%8E%86%E5%8F%B2/"/>
+    
+      <category term="新中国" scheme="http://www.bd7iwd.com/tags/%E6%96%B0%E4%B8%AD%E5%9B%BD/"/>
+    
+      <category term="逗逼" scheme="http://www.bd7iwd.com/tags/%E9%80%97%E9%80%BC/"/>
+    
+      <category term="皇帝" scheme="http://www.bd7iwd.com/tags/%E7%9A%87%E5%B8%9D/"/>
+    
+  </entry>
+  
+</feed>
